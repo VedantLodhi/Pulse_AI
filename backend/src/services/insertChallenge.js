@@ -1,3 +1,4 @@
+import "dotenv/config";
 import mongoose from "mongoose";
 import Challenge from "../models/challenges.model.js";
 
@@ -95,7 +96,7 @@ const challenges = [
   ];
   
 
-mongoose.connect('mongodb+srv://PlantIt:hmdBKXgQSrhb2mxf@cluster0.hecpz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
+mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
