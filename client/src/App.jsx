@@ -9,7 +9,6 @@ import Footer from './components/Footer';
 import Signup from './pages/User/Signup';
 import Details from './pages/User/Details';
 import Login from './pages/User/Login';
-import OtpVerify from './pages/User/OtpVerify';
 import ResetPassword from './pages/User/ResetPassword';
 
 import HomePage from './pages/HomePage';
@@ -30,7 +29,6 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/details" element={<Details />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/otpverify" element={<OtpVerify />} />
           <Route path="/page3" element={<Page3 />} />
           <Route path="/resetpassword" element={<ResetPassword />} />
 

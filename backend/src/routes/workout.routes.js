@@ -1,14 +1,13 @@
-// // routes/workout.routes.js
-// import express from 'express';
-// const router = express.Router();
-// import workoutController from '../controllers/workout.controller';
+// routes/workout.routes.js
+import express from 'express';
+import verifyToken from '../middlewares/auth.middleware.js';
+import * as workoutController from '../controllers/workout.controller.js';
 
-// // Workout Tracking
-// router.post('/log/:userId', workoutController.logWorkout);
-// router.get('/history/:userId', workoutController.getWorkoutHistory);
+const router = express.Router();
 
-// // Daily Streaks
-// router.get('/streak/:userId', workoutController.getWorkoutStreak);
-// router.put('/streak/:userId', workoutController.updateWorkoutStreak);
+// Workout endpoints (secured with JWT validation)
+router.post('/log', verifyToken, workoutController.logWorkout);
+router.get('/history', verifyToken, workoutController.getWorkoutHistory);
+router.get('/stats', verifyToken, workoutController.getWorkoutStats);
 
-// export default router;
+export default router;

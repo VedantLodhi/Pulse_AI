@@ -1,12 +1,8 @@
-// // routes/leaderboard.routes.js
-// import express from 'express';
-// const router = express.Router();
-// import leaderboardController from '../controllers/leaderboard.controller';
+import express from 'express';
+const router = express.Router();
+import { getLeaderboard } from '../controllers/leaderboard.controller.js';
 
-// // Leaderboards
-// router.get('/daily', leaderboardController.getDailyLeaderboard);
-// router.get('/weekly', leaderboardController.getWeeklyLeaderboard);
-// router.get('/monthly', leaderboardController.getMonthlyLeaderboard);
-// router.get('/yearly', leaderboardController.getYearlyLeaderboard);
+// GET /api/leaderboard - Get dynamic ranking of all athletes
+router.get('/', getLeaderboard);
 
-// export default router;
+export default router;

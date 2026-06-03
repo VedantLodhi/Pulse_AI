@@ -1,19 +1,26 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ML Fitness Tracker</title>
+    <title>PulseAI - Live Motion Tracking</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #4361ee;
-            --success: #38b000;
-            --warning: #ff9500;
-            --danger: #ef233c;
-            --dark: #212529;
-            --light: #f8f9fa;
+            --primary: #FF6B00;
+            --primary-glow: rgba(255, 107, 0, 0.15);
+            --accent: #FFFFFF;
+            --accent-glow: transparent;
+            --bg: #0A0A0A;
+            --surface: #171717;
+            --border: #262626;
+            
+            --success: #FFFFFF;
+            --warning: #FF6B00;
+            --danger: #ef4444;
+            --text-main: #FFFFFF;
+            --text-muted: #71717a;
         }
         
         * {
@@ -23,239 +30,608 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f4f8;
-            color: var(--dark);
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 24px;
+            position: relative;
+            z-index: 10;
         }
         
         header {
-            background-color: var(--primary);
-            color: white;
-            padding: 15px 0;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #0A0A0A;
+            border-bottom: 1px solid var(--border);
+            padding: 20px 24px;
+            margin-bottom: 32px;
         }
         
-        h1 {
-            text-align: center;
-            margin: 0;
-            font-size: 24px;
-            letter-spacing: 1px;
+        .logo-text {
+            font-size: 20px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-text span {
+            color: var(--primary);
+        }
+        
+        .header-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #171717;
+            border: 1px solid var(--border);
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            animation: pulse-animation 1.5s infinite;
+        }
+
+        @keyframes pulse-animation {
+            0% { transform: scale(0.95); opacity: 1; }
+            70% { transform: scale(1.1); opacity: 0.5; }
+            100% { transform: scale(0.95); opacity: 1; }
         }
         
         .content-wrapper {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 24px;
         }
         
         @media (min-width: 992px) {
             .content-wrapper {
                 flex-direction: row;
             }
+            .video-column {
+                flex: 7;
+            }
+            .controls-column {
+                flex: 3;
+            }
         }
         
+        .video-column {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
         .video-container {
-            flex: 1;
-            background-color: #000;
-            border-radius: 8px;
+            position: relative;
+            background-color: #000000;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid var(--border);
+            aspect-ratio: 16/9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .video-container img {
             width: 100%;
-            height: auto;
+            height: 100%;
+            object-fit: cover;
             display: block;
         }
+
+        .video-overlay-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(10, 10, 10, 0.85);
+            border: 1px solid var(--border);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: 0.5px;
+        }
         
-        .controls-container {
-            flex: 0 0 300px;
+        .controls-column {
             display: flex;
             flex-direction: column;
             gap: 20px;
         }
         
         .panel {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            position: relative;
         }
-        
+
         .panel-header {
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         
         .panel-title {
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-main);
             margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel-title i {
+            color: var(--primary);
+        }
+
+        .status-badge {
+            font-size: 10px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+            border: 1px solid var(--border);
+            background: #0A0A0A;
+            color: var(--text-muted);
+        }
+
+        .status-badge.active {
+            color: var(--primary);
+            border-color: var(--primary);
         }
         
         .controls {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 12px;
         }
         
         button {
-            padding: 10px;
-            font-size: 15px;
+            padding: 12px 16px;
+            font-size: 12px;
+            font-weight: 700;
             cursor: pointer;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 4px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background-color: #0A0A0A;
+            color: var(--text-main);
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 5px;
+            gap: 8px;
         }
         
         button:hover {
-            filter: brightness(1.1);
-            transform: translateY(-1px);
-        }
-        
-        button:active {
-            transform: translateY(1px);
+            border-color: #71717a;
+            background-color: #1f1f1f;
         }
         
         .btn-start-stop {
             grid-column: span 2;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-start-stop:hover {
+            background: #e05e00;
         }
         
         .btn-start-stop.running {
-            background-color: var(--danger);
+            background: var(--danger);
+        }
+
+        .btn-start-stop.running:hover {
+            background: #c92235;
         }
         
         .btn-reset {
-            background-color: var(--warning);
+            background-color: #0A0A0A;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+        }
+
+        .btn-reset:hover {
+            background-color: #1f1f1f;
         }
         
         .btn-debug {
-            background-color: var(--dark);
+            background-color: #0A0A0A;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
         }
-        
-        .exercise-btn {
-            background-color: var(--success);
-        }
-        
-        .stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+
+        .btn-debug:hover {
+            background-color: #1f1f1f;
+            color: var(--text-main);
         }
         
         .stat {
-            text-align: center;
+            text-align: left;
+            background: #0A0A0A;
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 12px;
+            position: relative;
         }
         
         .stat-value {
-            font-size: 26px;
-            font-weight: bold;
-            margin: 5px 0;
-            color: var(--primary);
+            font-size: 72px;
+            font-weight: 900;
+            line-height: 1;
+            margin: 8px 0;
+            color: var(--text-main);
+            letter-spacing: -2px;
+        }
+
+        .stat-value.highlight {
+            color: #FFFFFF;
         }
         
         .stat-label {
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .capsules-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .capsule {
+            background: #0A0A0A;
+            border: 1px solid var(--border);
+            padding: 12px;
+            border-radius: 999px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .capsule-label {
+            font-size: 8px;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+        }
+
+        .capsule-value {
             font-size: 14px;
-            color: #666;
+            font-weight: 800;
+            color: #FFFFFF;
             text-transform: uppercase;
         }
         
         .progress-container {
-            margin-top: 10px;
+            margin-top: 20px;
+            background: #0A0A0A;
+            border: 1px solid var(--border);
+            padding: 14px;
+            border-radius: 12px;
         }
         
         .progress-label {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 5px;
-            font-size: 14px;
+            margin-bottom: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .progress-bar {
-            height: 10px;
-            background-color: #e0e0e0;
-            border-radius: 5px;
+            height: 4px;
+            background-color: #262626;
+            border-radius: 99px;
             overflow: hidden;
         }
         
         .progress-fill {
             height: 100%;
-            background-color: var(--primary);
-            border-radius: 5px;
+            background: #FFFFFF;
+            border-radius: 99px;
+            width: 0%;
             transition: width 0.3s ease;
         }
         
         .feedback {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 4px;
+            margin-top: 16px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+            background-color: #0A0A0A;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feedback::before {
+            content: "\f10c";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
             font-size: 14px;
-            color: var(--dark);
-            background-color: #f0f4f8;
         }
         
         .feedback.good {
-            background-color: rgba(56, 176, 0, 0.1);
-            color: var(--success);
+            background-color: rgba(255, 255, 255, 0.05);
+            border-color: #FFFFFF;
+            color: #FFFFFF;
+        }
+
+        .feedback.good::before {
+            content: "\f058";
+            color: #FFFFFF;
         }
         
         .feedback.bad {
-            background-color: rgba(239, 35, 60, 0.1);
-            color: var(--danger);
+            background-color: rgba(255, 107, 0, 0.05);
+            border-color: var(--primary);
+            color: var(--primary);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .feedback.bad::before {
+            content: "\f06a";
+            color: var(--primary);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-4px); }
+            40%, 80% { transform: translateX(4px); }
         }
         
         .exercise-list {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 12px;
         }
         
         .exercise-card {
-            padding: 10px;
-            border-radius: 4px;
-            background-color: #f0f4f8;
+            padding: 14px;
+            border-radius: 12px;
+            background-color: #0A0A0A;
+            border: 1px solid var(--border);
             cursor: pointer;
             transition: all 0.2s ease;
             text-align: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .exercise-card:hover {
-            background-color: var(--primary);
-            color: white;
+            border-color: #71717a;
+            color: var(--text-main);
+            background-color: #121212;
         }
         
         .exercise-card.active {
-            background-color: var(--primary);
-            color: white;
-            font-weight: bold;
+            background: #FFFFFF;
+            border-color: #FFFFFF;
+            color: #0A0A0A;
+            box-shadow: none;
+        }
+
+        .exercise-card i {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        .exercise-card.active i {
+            opacity: 1;
         }
         
         footer {
             text-align: center;
-            margin-top: 30px;
-            padding: 10px 0;
-            color: #666;
-            font-size: 14px;
+            margin-top: 40px;
+            padding: 16px 0;
+            color: var(--text-muted);
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Summary Modal Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: #171717;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 440px;
+            padding: 32px;
+            transform: scale(0.95);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            text-align: center;
+        }
+
+        .modal-overlay.open .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background-color: #0A0A0A;
+            border: 1px solid var(--border);
+            color: var(--primary);
+            font-size: 10px;
+            font-weight: 800;
+            border-radius: 4px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-content h2 {
+            font-size: 20px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .modal-content p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .modal-summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .modal-summary-item {
+            background: #0A0A0A;
+            border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .modal-summary-item .item-label {
+            display: block;
+            font-size: 8px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .modal-summary-item .item-value {
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--text-main);
+        }
+
+        .modal-summary-item .text-orange {
+            color: var(--primary);
+        }
+
+        .modal-summary-item .text-green {
+            color: #FFFFFF;
+        }
+
+        .modal-footer {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .btn-modal-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-weight: 800;
+            padding: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-modal-primary:hover {
+            background: #e05e00;
+        }
+
+        .btn-modal-secondary {
+            background: #0A0A0A;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-modal-secondary:hover {
+            background-color: #171717;
+            border-color: #71717a;
         }
         
         @media (max-width: 768px) {
@@ -267,86 +643,118 @@
                 grid-column: span 1;
             }
             
-            .stats {
+            .capsules-container {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-footer {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
+
     <div class="container">
         <header>
-            <h1><i class="fas fa-heartbeat"></i> ML Fitness Tracker</h1>
+            <a href="/" class="logo-text">PULSE<span>AI</span></a>
+            <div class="header-status">
+                <span class="pulse-dot"></span>
+                <span>AI VISION LABS</span>
+            </div>
         </header>
         
         <div class="content-wrapper">
-            <div class="video-container">
-                <img src="{{ url_for('video_feed') }}" alt="Fitness Tracker Video Feed">
+            <!-- Left Camera Feed Section -->
+            <div class="video-column">
+                <div class="video-container">
+                    <img src="{{ url_for('video_feed') }}" alt="Fitness Tracker Video Feed">
+                    <div class="video-overlay-badge">
+                        <span class="pulse-dot"></span>
+                        <span>POSE OVERLAY CORE V1.0</span>
+                    </div>
+                </div>
             </div>
             
-            <div class="controls-container">
+            <!-- Right Analytics Dashboard -->
+            <div class="controls-column">
+                <!-- Controls Panel -->
                 <div class="panel">
                     <div class="panel-header">
-                        <h2 class="panel-title">Controls</h2>
-                        <span id="status" class="badge">PAUSED</span>
+                        <h2 class="panel-title"><i class="fas fa-sliders-h"></i> System Controls</h2>
+                        <span id="status" class="status-badge">PAUSED</span>
                     </div>
                     <div class="controls">
                         <button id="startStopBtn" class="btn-start-stop">
-                            <i class="fas fa-play"></i> Start
+                            <i class="fas fa-play"></i> Start Tracking
                         </button>
                         <button id="resetBtn" class="btn-reset">
-                            <i class="fas fa-redo"></i> Reset
+                            <i class="fas fa-redo"></i> Reset Session
                         </button>
                         <button id="debugBtn" class="btn-debug">
-                            <i class="fas fa-bug"></i> Debug
+                            <i class="fas fa-bug"></i> Debug Mode
                         </button>
                     </div>
                 </div>
                 
+                <!-- Performance Statistics Panel -->
                 <div class="panel">
                     <div class="panel-header">
-                        <h2 class="panel-title">Statistics</h2>
+                        <h2 class="panel-title"><i class="fas fa-chart-bar"></i> Analytics Console</h2>
                     </div>
-                    <div class="stats">
-                        <div class="stat">
-                            <div class="stat-value" id="rep-count">0</div>
-                            <div class="stat-label">Repetitions</div>
+                    
+                    <div class="stat">
+                        <div class="stat-label">Repetitions</div>
+                        <div class="stat-value highlight" id="rep-count">0</div>
+                    </div>
+                    
+                    <div class="capsules-container">
+                        <div class="capsule">
+                            <span class="capsule-label">Duration</span>
+                            <span class="capsule-value font-mono" id="elapsed-time">00:00:00</span>
                         </div>
-                        <div class="stat">
-                            <div class="stat-value" id="elapsed-time">00:00:00</div>
-                            <div class="stat-label">Time</div>
+                        <div class="capsule">
+                            <span class="capsule-label">Stage</span>
+                            <span class="capsule-value" id="rep-stage">waiting</span>
                         </div>
                     </div>
+                    
                     <div class="progress-container">
                         <div class="progress-label">
-                            <span>Detection Confidence</span>
+                            <span>Keypoint Visibility Confidence</span>
                             <span id="confidence-value">0%</span>
                         </div>
                         <div class="progress-bar">
                             <div class="progress-fill" id="confidence-bar" style="width: 0%"></div>
                         </div>
                     </div>
+                    
                     <div class="feedback" id="form-feedback">
-                        Waiting to detect form...
+                        Position yourself in front of the camera...
                     </div>
                 </div>
                 
+                <!-- Exercise Gating Panel -->
                 <div class="panel">
                     <div class="panel-header">
-                        <h2 class="panel-title">Exercises</h2>
+                        <h2 class="panel-title"><i class="fas fa-dumbbell"></i> Active Exercise</h2>
                     </div>
                     <div class="exercise-list" id="exercise-list">
                         <div class="exercise-card active" data-exercise="pushup">
-                            <i class="fas fa-dumbbell"></i> Push-up
+                            <i class="fas fa-running"></i>
+                            <span>Push-up</span>
                         </div>
                         <div class="exercise-card" data-exercise="situp">
-                            <i class="fas fa-dumbbell"></i> Sit-up
+                            <i class="fas fa-chair"></i>
+                            <span>Sit-up</span>
                         </div>
                         <div class="exercise-card" data-exercise="curlup">
-                            <i class="fas fa-dumbbell"></i> Curl-up
+                            <i class="fas fa-dumbbell"></i>
+                            <span>Bicep Curl</span>
                         </div>
                         <div class="exercise-card" data-exercise="squat">
-                            <i class="fas fa-dumbbell"></i> Squat
+                            <i class="fas fa-accessibility"></i>
+                            <span>Squat</span>
                         </div>
                     </div>
                 </div>
@@ -354,8 +762,45 @@
         </div>
         
         <footer>
-            &copy; 2025 ML Fitness Tracker - Powered by MediaPipe and Computer Vision
+            &copy; 2026 PulseAI Premium Tracker - Motion Intelligence Core API
         </footer>
+    </div>
+
+    <!-- Workout Completion Summary Modal -->
+    <div id="summaryModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-badge"><i class="fas fa-award"></i> Session Synced</span>
+            <h2>Workout Complete</h2>
+            <p>Your workout stats have been evaluated and safely saved to MongoDB.</p>
+            
+            <div class="modal-summary-grid">
+                <div class="modal-summary-item">
+                    <span class="item-label">Exercise</span>
+                    <span class="item-value" id="modal-exercise">Push-up</span>
+                </div>
+                <div class="modal-summary-item">
+                    <span class="item-label">Reps Completed</span>
+                    <span class="item-value text-orange" id="modal-reps">0</span>
+                </div>
+                <div class="modal-summary-item">
+                    <span class="item-label">Avg Accuracy</span>
+                    <span class="item-value text-green" id="modal-accuracy">100%</span>
+                </div>
+                <div class="modal-summary-item">
+                    <span class="item-label">Duration</span>
+                    <span class="item-value font-mono" id="modal-duration">00:00</span>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button id="modalViewAnalyticsBtn" class="btn-modal-secondary">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </button>
+                <button id="modalNewSessionBtn" class="btn-modal-primary">
+                    New Session
+                </button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -367,10 +812,11 @@
             const exerciseCards = document.querySelectorAll('.exercise-card');
             const repCount = document.getElementById('rep-count');
             const elapsedTime = document.getElementById('elapsed-time');
-            const status = document.getElementById('status');
+            const statusBadge = document.getElementById('status');
             const formFeedback = document.getElementById('form-feedback');
             const confidenceBar = document.getElementById('confidence-bar');
             const confidenceValue = document.getElementById('confidence-value');
+            const summaryModal = document.getElementById('summaryModal');
             
             // Start/Stop button
             startStopBtn.addEventListener('click', function() {
@@ -413,7 +859,82 @@
                         .catch(error => console.error('Error:', error));
                 });
             });
+
+            // Modal Button Events
+            document.getElementById('modalNewSessionBtn').addEventListener('click', function() {
+                summaryModal.classList.remove('open');
+                fetch('/reset')
+                    .then(response => response.json())
+                    .then(data => console.log(data))
+                    .catch(error => console.error('Error reset:', error));
+            });
+
+            document.getElementById('modalViewAnalyticsBtn').addEventListener('click', function() {
+                window.location.href = 'http://localhost:5173/dashboard';
+            });
             
+            let lastSavedWorkout = null;
+
+            function formatExerciseName(type) {
+                if (!type) return "";
+                if (type === "curlup" || type === "bicep_curl") return "Bicep Curl";
+                if (type === "pushup") return "Push-up";
+                if (type === "situp") return "Sit-up";
+                if (type === "squat") return "Squat";
+                return type.charAt(0).toUpperCase() + type.slice(1);
+            }
+
+            function saveWorkoutSession(state) {
+                const sessionKey = `${state.exercise_type}_${state.count}_${state.elapsed_time}`;
+                if (lastSavedWorkout === sessionKey) return;
+                lastSavedWorkout = sessionKey;
+
+                console.log("Saving workout session:", state);
+                let displayExerciseType = state.exercise_type === "curlup" ? "bicep_curl" : state.exercise_type;
+
+                const payload = {
+                    exerciseType: displayExerciseType,
+                    reps: state.count,
+                    duration: state.elapsed_time,
+                    averageConfidence: state.average_confidence || state.confidence_score,
+                    validReps: state.valid_reps !== undefined ? state.valid_reps : state.count,
+                    invalidReps: state.invalid_reps !== undefined ? state.invalid_reps : 0
+                };
+
+                // Display modal instantly with values before POST completion
+                document.getElementById('modal-exercise').textContent = formatExerciseName(state.exercise_type);
+                document.getElementById('modal-reps').textContent = state.count;
+                const accuracy = state.count > 0 ? Math.round(((state.valid_reps !== undefined ? state.valid_reps : state.count) / state.count) * 100) : 100;
+                document.getElementById('modal-accuracy').textContent = `${accuracy}%`;
+                document.getElementById('modal-duration').textContent = state.elapsed_time;
+                
+                // Show modal overlay
+                summaryModal.classList.add('open');
+
+                fetch('http://localhost:5000/api/workouts/log', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload),
+                    credentials: 'include'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to log workout');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Workout logged successfully to database:', data);
+                })
+                .catch(error => {
+                    console.error('Error saving workout:', error);
+                });
+            }
+
+            let previousState = null;
+
             // Update stats
             function updateStats() {
                 fetch('/get_state')
@@ -425,16 +946,25 @@
                         // Update elapsed time
                         elapsedTime.textContent = data.elapsed_time;
                         
-                        // Update status
-                        status.textContent = data.status;
+                        // Update status badge
+                        statusBadge.textContent = data.status;
+                        if (data.status === 'RUNNING') {
+                            statusBadge.className = "status-badge active";
+                            startStopBtn.classList.add('running');
+                            startStopBtn.innerHTML = '<i class="fas fa-pause"></i> Pause Session';
+                        } else {
+                            statusBadge.className = "status-badge";
+                            startStopBtn.classList.remove('running');
+                            startStopBtn.innerHTML = '<i class="fas fa-play"></i> Resume Tracking';
+                        }
                         
                         // Update form feedback
                         formFeedback.textContent = data.form_feedback;
                         
                         // Update form feedback styling
-                        if (data.form_feedback === "Good form") {
+                        if (data.form_feedback.includes("Good form") || data.form_feedback.includes("Good rep!")) {
                             formFeedback.className = "feedback good";
-                        } else if (data.form_feedback === "Waiting to detect form...") {
+                        } else if (data.form_feedback.includes("Position yourself") || data.form_feedback.includes("Waiting to detect")) {
                             formFeedback.className = "feedback";
                         } else {
                             formFeedback.className = "feedback bad";
@@ -446,14 +976,30 @@
                         confidenceValue.textContent = `${Math.round(confidenceScore)}%`;
                         
                         // Set confidence bar color based on score
-                        if (confidenceScore > 80) {
-                            confidenceBar.style.backgroundColor = 'var(--success)';
-                        } else if (confidenceScore > 60) {
-                            confidenceBar.style.backgroundColor = 'var(--warning)';
+                        if (confidenceScore > 85) {
+                            confidenceBar.style.backgroundImage = 'none';
+                            confidenceBar.style.backgroundColor = '#FFFFFF';
+                        } else if (confidenceScore > 65) {
+                            confidenceBar.style.backgroundImage = 'none';
+                            confidenceBar.style.backgroundColor = 'var(--primary)';
                         } else {
+                            confidenceBar.style.backgroundImage = 'none';
                             confidenceBar.style.backgroundColor = 'var(--danger)';
                         }
                         
+                        // Update rep stage
+                        const repStage = document.getElementById('rep-stage');
+                        if (repStage) {
+                            repStage.textContent = data.rep_stage;
+                            if (data.rep_stage === 'down') {
+                                repStage.style.color = 'var(--warning)';
+                            } else if (data.rep_stage === 'up') {
+                                repStage.style.color = 'var(--success)';
+                            } else {
+                                repStage.style.color = 'var(--text-muted)';
+                            }
+                        }
+
                         // Update exercise selection
                         exerciseCards.forEach(card => {
                             if (card.getAttribute('data-exercise') === data.exercise_type) {
@@ -462,17 +1008,20 @@
                                 card.classList.remove('active');
                             }
                         });
-                        
-                        // Update button based on status
-                        if (data.status === 'RUNNING') {
-                            startStopBtn.classList.add('running');
-                            startStopBtn.innerHTML = '<i class="fas fa-pause"></i> Stop';
-                        } else {
-                            startStopBtn.classList.remove('running');
-                            startStopBtn.innerHTML = '<i class="fas fa-play"></i> Start';
+
+                        // --- Automatic Session Persistence ---
+                        if (previousState) {
+                            if (previousState.status === 'RUNNING' && data.status === 'PAUSED' && previousState.count > 0) {
+                                saveWorkoutSession(previousState);
+                            }
+                            else if ((previousState.exercise_type !== data.exercise_type || (previousState.count > 0 && data.count === 0)) && previousState.count > 0) {
+                                saveWorkoutSession(previousState);
+                            }
                         }
+                        
+                        previousState = data;
                     })
-                    .catch(error => console.error('Error:', error));
+                    .catch(error => console.error('Error fetching state:', error));
             }
             
             // Update stats every second
@@ -485,12 +1034,10 @@
             fetch('/available_exercises')
                 .then(response => response.json())
                 .then(data => {
-                    // Create exercise cards dynamically if needed
-                    // This is already handled in the HTML for the provided exercises
+                    console.log("Available exercises:", data);
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => console.error('Error fetching exercises:', error));
         });
     </script>
 </body>
 </html>
-        

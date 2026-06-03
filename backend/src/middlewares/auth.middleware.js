@@ -1,13 +1,23 @@
 // middlewares/auth.middleware.js
 import jwt from 'jsonwebtoken';
+
 const verifyToken = (req, res, next) => {
-  const token = req.cookies.token;  // Get JWT from cookies\
-  // console.log('Token from cookies:', token); // Log the token for debugging
-  if (!token) return res.status(401).json({ message: 'Access Denied' });
+  console.log("=== AUTH DEBUG ===");
+  console.log("Cookies:", req.cookies);
+  console.log("Token:", req.cookies?.token);
+  const token = req.cookies?.token;  // Get JWT from cookies
+  
+  if (!token) {
+    return res.status(401).json({ message: 'Access Denied' });
+  }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded.id; // Log the decoded user ID
+    console.log("Decoded:", decoded);
+    const userId = decoded.id || decoded.userId;
+    console.log("Resolved User ID:", userId);
+    req.user = userId;
+    req.userId = userId;
     next();
   } catch (err) {
     return res.status(403).json({ message: 'Invalid Token' });

@@ -8,16 +8,11 @@ import * as userController from '../controllers/user.controller.js';
 // User Authentication
 router.post('/register', userController.registerUser);
 router.post('/login', userController.loginUser);
+router.post('/google-login', userController.googleLogin);
 router.get('/logout', userController.logoutUser);
 
 
-// User Verification
-router.post("/verifyEmailOtp", userController.verifyEmailOtp);
-router.post("/verifyPhoneOtp", userController.verifyPhoneOtp);
 
-// Resend Otp
-// router.post("/resendEmailOtp", userController.verifyEmailOtp);
-// router.post("/resendPhoneOtp", userController.verifyPhoneOtp);
 
 // User Profile & Details
 router.get('/profile',verifyToken, userController.getUserProfile);

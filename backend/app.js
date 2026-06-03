@@ -4,9 +4,9 @@ import cors from "cors";
 import connectDB from "./src/config/db.js";
 import cookieParser from "cookie-parser";
 import userRoutes from './src/routes/user.routes.js';
-// import workoutRoutes from './src/routes/workout.routes.js';
-// import challengeRoutes from './src/routes/challenges.routes.js';
-// import leaderboardRoutes from './src/routes/leaderboard.routes.js';
+import workoutRoutes from './src/routes/workout.routes.js';
+import leaderboardRoutes from './src/routes/leaderboard.routes.js';
+
 // import rewardRoutes from './src/routes/reward.routes.js';
 
 const app = express();
@@ -14,7 +14,7 @@ const app = express();
 app.use(express.json());
 
 const corsOptions = {
-  origin: ["https://ai-fitness-tracker-tau.vercel.app"],
+  origin: ["https://ai-fitness-tracker-tau.vercel.app", "http://localhost:5173", "http://127.0.0.1:5173"],
   credentials: true
 };
 
@@ -25,10 +25,9 @@ app.use(cookieParser());
 await connectDB();
 
 app.use('/api/users', userRoutes);
-// app.use('/api/workouts', workoutRoutes);
-// app.use('/api/challenges', challengeRoutes);
-// app.use('/api/leaderboards', leaderboardRoutes);
-// app.use('/api/rewards', rewardRoutes);
+app.use('/api/workouts', workoutRoutes);
+app.use('/api/leaderboard', leaderboardRoutes);
+
 
 
 app.listen(5000, () => {

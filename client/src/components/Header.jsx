@@ -75,34 +75,35 @@ function Header() {
 
   return (
     <>
-    <header className="flex justify-between items-center p-4 bg-gray-200 shadow-md fixed top-0 z-10 w-full h-15">
-      <h1 className="text-3xl font-bold text-orange-500 italic"><a href="/">PULSE</a></h1>
+    <header className="flex justify-between items-center px-8 py-4 bg-[#0A0A0A] border-b border-zinc-900 fixed top-0 z-50 w-full h-16 text-white">
+      <h1 className="text-lg font-black tracking-widest italic">
+        <a href="/" className="hover:opacity-90 transition-opacity">PULSE<span className="text-[#FF6B00]">AI</span></a>
+      </h1>
       
-      <nav className="hidden md:flex gap-6 text-gray-700 text-lg">
-          <a href="/dashboard">Dashboard</a>
-          <a href="/challenges">Challenges</a>
-          <a href="/leaderboard">LeaderBoard</a>
-          <a href="/page3">Contact Us</a>
+      <nav className="hidden md:flex gap-8 text-zinc-400 text-xs font-bold tracking-widest uppercase">
+          <a href="/dashboard" className="hover:text-white transition-colors duration-200">Dashboard</a>
+          <a href="/challenges" className="hover:text-white transition-colors duration-200">Challenges</a>
+          <a href="/leaderboard" className="hover:text-white transition-colors duration-200">LeaderBoard</a>
+          <a href="/page3" className="hover:text-white transition-colors duration-200">Contact Us</a>
       </nav>
       
-      <div className="flex gap-8 items-center text-lg">
+      <div className="flex gap-6 items-center text-xs font-bold tracking-widest uppercase">
         {userName ? (
-          <span className="font-semibold text-orange-600">Hi, {userName}</span>
+          <span className="text-zinc-300">Hi, <span className="text-white font-black">{userName}</span></span>
         ) : (
-          <>
-            <a href='/signup'>Signup</a>
-            <a href='/login'>Login</a>
-          </>
+          <div className="flex gap-6 items-center">
+            <a href='/login' className="text-zinc-400 hover:text-white transition-colors duration-200">Login</a>
+            <a href='/signup' className="bg-[#FF6B00] hover:bg-[#e05e00] text-white px-5 py-2 transition-all duration-200 shadow-md">Signup</a>
+          </div>
         )}
         
-        <FaSearch className="text-gray-700 cursor-pointer" />
-        <FaBell className="text-gray-700 cursor-pointer" />
-        {/* <FaBars className="md:hidden text-gray-700 cursor-pointer" /> */}
+        <FaSearch className="text-zinc-400 hover:text-white cursor-pointer transition-colors" />
+        <FaBell className="text-zinc-400 hover:text-white cursor-pointer transition-colors" />
         <button 
             onClick={() => setIsSidebarOpen(true)}
-            className="  text-gray-700 cursor-pointer md:hidden"
+            className="text-zinc-400 hover:text-white cursor-pointer md:hidden"
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <line x1="3" y1="12" x2="21" y2="12"></line>
               <line x1="3" y1="6" x2="21" y2="6"></line>
               <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -110,7 +111,7 @@ function Header() {
         </button>
         {isLoggedIn && (
           <FaSignOutAlt 
-            className="text-gray-700 cursor-pointer" 
+            className="text-zinc-400 hover:text-[#FF6B00] cursor-pointer transition-colors" 
             onClick={handleLogout} 
             title="Logout" 
           />
@@ -121,47 +122,47 @@ function Header() {
     
     {isSidebarOpen && (
       <div 
-        className="fixed inset-0 bg-black bg-opacity-50 z-30"
+        className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40"
         onClick={() => setIsSidebarOpen(false)}
       />
     )}
 
     {/* Sidebar */}
-    <div className={`fixed top-0 right-0 h-full w-72 bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-40 ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-      <div className="p-4">
-        <a href='/' className='font-bold text-3xl text-orange-500 italic'>PULSE</a>
+    <div className={`fixed top-0 right-0 h-full w-72 bg-[#0A0A0A] border-l border-zinc-900 shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div className="p-6">
+        <a href='/' className='font-black text-xl text-white italic tracking-widest uppercase'>PULSE<span className="text-[#FF6B00]">AI</span></a>
 
         <button 
           onClick={() => setIsSidebarOpen(false)}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+          className="absolute top-6 right-6 text-zinc-400 hover:text-white"
         >
           <X size={24} />
         </button>
 
         {/* User Profile Section */}
-        <div className="flex items-center gap-3 p-4 bg-orange-100 rounded-lg mb-6 mt-8">
-          <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
+        <div className="flex items-center gap-3 p-4 bg-[#121212] border border-zinc-900 rounded-none mb-6 mt-8">
+          <div className="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400">
             <User size={20} />
           </div>
           <div>
-            <h3 className="font-semibold text-gray-800">{userName}</h3>
-            {/* <p className="text-sm text-gray-600">{userMail}</p> */}
+            <h3 className="font-bold text-white text-sm">{userName || "Guest Account"}</h3>
+            <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Athlete</p>
           </div>
         </div>
 
         {/* Navigation Links */}
-        <nav className="space-y-2">
-          <SidebarLink icon={<Home size={20} />} label="Home" href='/'/>
-          <SidebarLink icon={<Dumbbell size={20} />} label="Exercise" href="/notfound"/>
-          <SidebarLink icon={<Heart size={20} />} label="Meditation" href="/page3"/>
-          <SidebarLink icon={<ShoppingBag size={20} />} label="Market Place" href="/dashboard"/>
-          <SidebarLink icon={<Trophy size={20} />} label="Leader Board" href='/leaderboard' />
-          <SidebarLink icon={<Flag size={20} />} label="Challenges" href="/page4"/>
+        <nav className="space-y-1">
+          <SidebarLink icon={<Home size={18} />} label="Home" href='/'/>
+          <SidebarLink icon={<Dumbbell size={18} />} label="Exercise" href="/dashboard"/>
+          <SidebarLink icon={<Heart size={18} />} label="Meditation" href="/page3"/>
+          <SidebarLink icon={<ShoppingBag size={18} />} label="Market Place" href="/dashboard"/>
+          <SidebarLink icon={<Trophy size={18} />} label="Leader Board" href='/leaderboard' />
+          <SidebarLink icon={<Flag size={18} />} label="Challenges" href="/page4"/>
           
-          <div className="border-t border-gray-200 my-4" />
+          <div className="border-t border-zinc-900 my-4" />
           
-          <SidebarLink icon={<Settings size={20} />} label="Settings" href="/notfound"/>
-          <SidebarLink icon={<HelpCircle size={20} />} label="Support" />
+          <SidebarLink icon={<Settings size={18} />} label="Settings" href="/dashboard"/>
+          <SidebarLink icon={<HelpCircle size={18} />} label="Support" href="/page3"/>
         </nav>
       </div>
     </div>
@@ -174,7 +175,7 @@ function SidebarLink({ icon, label, href }) {
   return (
     <a 
       href={href} 
-      className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+      className="flex items-center gap-3 px-4 py-2.5 text-zinc-400 hover:text-white hover:bg-zinc-900/40 transition-all duration-200 text-xs font-bold uppercase tracking-wider"
     >
       {icon}
       <span>{label}</span>

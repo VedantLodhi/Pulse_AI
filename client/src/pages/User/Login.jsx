@@ -1,17 +1,55 @@
-import { useState } from "react";
-import { Link } from "react-router";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Backend_Uri } from "../../config.js";
+import { Flame } from "lucide-react";
 
 export default function Login() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    rememberMe: false,
   });
 
   const navigate = useNavigate();
+
+  const handleGoogleCallback = async (response) => {
+    try {
+      console.log("Encoded JWT ID token received from Google:", response.credential);
+      const res = await axios.post(
+        `${Backend_Uri}/api/users/google-login`,
+        { credential: response.credential },
+        { withCredentials: true }
+      );
+      if (res.status === 200) {
+        console.log("Google Sign-In success:", res.data);
+        navigate("/dashboard");
+        window.location.reload();
+      }
+    } catch (err) {
+      console.error("Google Auth error:", err.response?.data?.message || err.message);
+    }
+  };
+
+  useEffect(() => {
+    /* global google */
+    if (typeof google !== 'undefined') {
+      google.accounts.id.initialize({
+        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID || "1081648037356-placeholdercookieid.apps.googleusercontent.com",
+        callback: handleGoogleCallback,
+      });
+      google.accounts.id.renderButton(
+        document.getElementById("googleSignInBtn"),
+        { 
+          theme: "filled_black", 
+          size: "large", 
+          text: "continue_with",
+          shape: "rectangular",
+          width: "320" // Matches form max-width
+        }
+      );
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,28 +60,16 @@ export default function Login() {
         { withCredentials: true }
       );
       if (response.status === 200) {
-        ("Login successful:", response.data);
+        console.log("Login successful:", response.data);
         navigate("/dashboard");
+        window.location.reload();
       }
-      window.location.reload();
     } catch (error) {
       if (error.response) {
         const message = error.response.data.message;
-
-        if (message === "Verify Otp") {
-          ("OTP verification required.");
-          navigate("/verificationpage");
-        } else if (message === "Fill All the details") {
-          ("User needs to complete registration.");
-          navigate("/studentregister2");
-        } else if (message === "Verify your image") {
-          ("User needs to verify their image.");
-          navigate("/studentregister2/image");
-        } else {
-          console.error("Server error:", message);
-        }
+        console.error("Login server error:", message);
       } else if (error.request) {
-        console.error("No response received:", error.request);
+        console.error("No response received from login server:", error.request);
       } else {
         console.error("Request error:", error.message);
       }
@@ -51,222 +77,146 @@ export default function Login() {
   };
 
   return (
-    // <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col lg:flex-row">
-    //   {/* Left Section */}
-    //   <div className="flex-1 p-6 lg:p-16 flex items-center ml-10">
-    //     <div className="max-w-xl mx-auto lg:mx-0">
-    //       <h1 className="text-3xl lg:text-5xl font-semibold mb-4 text-center lg:text-left">
-    //         Attendance
-    //         <span className="block text-blue-700 mt-2">for your business</span>
-    //       </h1>
-    //       <p className="text-gray-600 mt-4 text-center lg:text-left text-sm lg:text-base">
-    //         Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet,
-    //         itaque accusantium odio, soluta, corrupti aliquam quibusdam tempora
-    //         at cupiditate quis eum maiores libero veritatis? Dicta facilis sint
-    //         aliquid ipsum atque?
-    //       </p>
-    //     </div>
-    //   </div>
-
-    //   {/* Right Section */}
-    //   <div className="flex-1 flex items-center justify-center p-6 lg:p-20">
-    //     <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6 lg:p-8">
-    //       <form onSubmit={handleSubmit} className="space-y-4 lg:space-y-6">
-    //         <div>
-    //           <label
-    //             htmlFor="email"
-    //             className="block text-sm font-medium text-gray-700 mb-1"
-    //           >
-    //             Email
-    //           </label>
-    //           <input
-    //             id="email"
-    //             type="email"
-    //             value={formData.email}
-    //             onChange={(e) =>
-    //               setFormData({ ...formData, email: e.target.value })
-    //             }
-    //             required
-    //             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-    //           />
-    //         </div>
-
-    //         <div>
-    //           <label
-    //             htmlFor="password"
-    //             className="block text-sm font-medium text-gray-700 mb-1"
-    //           >
-    //             Password
-    //           </label>
-    //           <input
-    //             id="password"
-    //             type="password"
-    //             value={formData.password}
-    //             onChange={(e) =>
-    //               setFormData({ ...formData, password: e.target.value })
-    //             }
-    //             required
-    //             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-    //           />
-    //         </div>
-
-    //         <div className="flex items-center justify-between">
-    //           {/* <div className="flex items-center">
-    //             <input
-    //               id="remember-me"
-    //               type="checkbox"
-    //               checked={formData.rememberMe}
-    //               onChange={(e) =>
-    //                 setFormData({ ...formData, rememberMe: e.target.checked })
-    //               }
-    //               className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-    //             />
-    //             <label
-    //               htmlFor="remember-me"
-    //               className="ml-2 block text-sm text-gray-700"
-    //             >
-    //               Remember me
-    //             </label>
-    //           </div> */}
-    //           <Link
-    //             href="/forgot-password"
-    //             className="text-sm text-blue-600 hover:text-blue-700"
-    //           >
-    //             Forgot password?
-    //           </Link>
-    //         </div>
-
-    //         <button
-    //           type="submit"
-    //           className="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-    //         >
-    //           Sign in
-    //         </button>
-
-    //         <p className="text-center text-sm text-gray-600">
-    //           Don't have an account?{" "}
-    //           <button
-    //             className="text-blue-600 hover:text-blue-700 font-medium"
-    //             onClick={() => navigate("./StudentRegister")}
-    //           >
-    //             Register here
-    //           </button>
-    //         </p>
-    //       </form>
-    //     </div>
-    //   </div>
-    // </div>
-    
-
-
-
-    <div className="min-h-screen bg-white flex items-center justify-center mt-0 custom2:mt-10">
-    <div className="w-full max-w-md">
-      {/* Profile Icon */}
-      <div className="flex justify-center">
-        <div className="w-16 h-16 bg-gray-200 rounded-full"></div>
+    <div className="min-h-screen bg-[#0A0A0A] flex flex-col md:flex-row">
+      {/* Left Side (60%) - Hero Athlete Panel */}
+      <div className="hidden md:flex md:w-3/5 relative overflow-hidden bg-zinc-950 items-center">
+        <div 
+          className="absolute inset-0 bg-cover bg-center transition-transform duration-10000 hover:scale-105" 
+          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1200&auto=format&fit=crop')" }}
+        ></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+        
+        <div className="relative z-10 p-12 max-w-xl">
+          <div className="flex items-center gap-2 text-[#FF6B00] mb-6">
+            <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center text-white font-black text-lg italic border border-[#FF6B00]/40">
+              P
+            </div>
+            <span className="font-black tracking-widest text-white text-sm">PULSEAI</span>
+          </div>
+          
+          <h2 className="text-5xl font-black tracking-tight text-white mb-6 uppercase leading-none">
+            TRAIN SMARTER.<br/>
+            <span className="text-[#FF6B00]">MOVE BETTER.</span>
+          </h2>
+          <p className="text-zinc-300 text-base leading-relaxed">
+            AI-powered fitness tracking with real-time posture evaluation and computer vision rep analysis. Optimize your body alignment automatically.
+          </p>
+        </div>
+        
+        <div className="absolute bottom-6 left-12 right-12 flex justify-between text-xs text-zinc-500 font-bold uppercase tracking-widest">
+          <span>PulseAI Studio Engine v2.0</span>
+          <span>© 2026</span>
+        </div>
       </div>
 
-      <div className="bg-white rounded-2xl p-6 w-full">
-        <h1 className="text-2xl font-semibold text-center mb-6">Sign in</h1>
-
-        <form onSubmit={handleSubmit} className="space-y-4 lg:space-y-6">
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
+      {/* Right Side (40%) - Authentication Panel */}
+      <div className="w-full md:w-2/5 flex flex-col justify-center items-center px-6 py-12 md:px-12 bg-[#0A0A0A] border-l border-[#262626]/80 mt-16 md:mt-0">
+        <div className="w-full max-w-sm">
+          {/* Logo header (only visible on mobile) */}
+          <div className="flex md:hidden flex-col items-center mb-8">
+            <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center text-white font-black text-xl italic border border-[#FF6B00] mb-2">
+              P
             </div>
+            <span className="font-black text-white tracking-widest text-xs">PULSEAI</span>
+          </div>
 
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={formData.password}
-                onChange={(e) =>
-                  setFormData({ ...formData, password: e.target.value })
-                }
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-
-            <div className="flex items-center justify-between">
-              {/* <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  type="checkbox"
-                  checked={formData.rememberMe}
-                  onChange={(e) =>
-                    setFormData({ ...formData, rememberMe: e.target.checked })
-                  }
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                />
-                <label
-                  htmlFor="remember-me"
-                  className="ml-2 block text-sm text-gray-700"
-                >
-                  Remember me
-                </label>
-              </div> */}
-              <Link
-                href="/forgot-password"
-                className="text-sm text-blue-600 hover:text-blue-700"
-              >
-                Forgot password?
-              </Link>
-            </div>
-
-            <button
-              type="submit"
-              className="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            >
-              Sign in
-            </button>
-
-            <p className="text-center text-sm text-gray-600">
-              Don't have an account?{" "}
-              <button
-                className="text-blue-600 hover:text-blue-700 font-medium"
-                onClick={() => navigate("/signup")}
-              >
-                Register here
-              </button>
+          <div className="mb-8">
+            <h1 className="text-2xl font-black text-white uppercase tracking-tight mb-2">
+              Welcome Back
+            </h1>
+            <p className="text-zinc-500 text-xs">
+              Access your personalized AI metrics and training records.
             </p>
-          </form>
-      </div>
+          </div>
 
-      {/* Create Account Section */}
-      <div className="mt-8 text-center space-y-4">
-        <p className="text-gray-600">New to our community</p>
-        <button className="w-full py-2 px-4 border border-gray-300 rounded-full text-gray-700 hover:bg-gray-50 transition-colors"
-        onClick={() => window.location.href = "/signup"}>
-          Create an account
-        </button>
-      </div>
+          {/* Form container */}
+          <div className="bg-[#171717]/80 border border-[#262626] rounded-2xl p-6 md:p-8 shadow-2xl backdrop-blur-md">
+            {/* Primary CTA: Google Sign In */}
+            <div className="mb-6">
+              <label className="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-3 text-center">
+                Primary Access Method
+              </label>
+              <div className="flex justify-center w-full">
+                <div 
+                  id="googleSignInBtn" 
+                  className="w-full max-w-[320px] rounded-lg transition-all duration-300 hover:ring-2 hover:ring-[#FF6B00] hover:shadow-[0_0_12px_rgba(255,107,0,0.3)] overflow-hidden"
+                ></div>
+              </div>
+            </div>
 
-      {/* Decorative Elements */}
-      <div className="fixed top-4 right-4 w-2 h-2 bg-red-500 rounded-full"></div>
-      <div className="fixed bottom-4 right-4 w-2 h-2 bg-red-500 rounded-full"></div>
-    </div>
+            {/* Separator OR */}
+            <div className="flex items-center justify-between my-5">
+              <hr className="w-full border-[#262626]" />
+              <span className="text-[9px] text-zinc-500 px-3 font-bold tracking-widest uppercase">OR</span>
+              <hr className="w-full border-[#262626]" />
+            </div>
+
+            {/* Secondary Option: Email Form */}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="email" className="block text-[10px] font-bold text-zinc-400 mb-1.5 uppercase tracking-wider">
+                  Email Address
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                  required
+                  className="w-full px-3 py-2 bg-black border border-[#262626] rounded-md focus:outline-none focus:ring-1 focus:ring-[#FF6B00] focus:border-[#FF6B00] text-sm text-white placeholder-zinc-700 transition"
+                />
+              </div>
+
+              <div>
+                <div className="flex justify-between items-center mb-1.5">
+                  <label htmlFor="password" className="block text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
+                    Password
+                  </label>
+                  <Link
+                    to="/resetpassword"
+                    className="text-[10px] text-zinc-500 hover:text-white font-semibold transition"
+                  >
+                    Forgot?
+                  </Link>
+                </div>
+                <input
+                  id="password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
+                  required
+                  className="w-full px-3 py-2 bg-black border border-[#262626] rounded-md focus:outline-none focus:ring-1 focus:ring-[#FF6B00] focus:border-[#FF6B00] text-sm text-white placeholder-zinc-700 transition"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-[#FF6B00] hover:bg-[#FF6B00]/90 text-white px-4 py-2.5 rounded-md transition-colors text-xs font-bold uppercase tracking-wider mt-2 shadow-lg"
+              >
+                Sign in with Email
+              </button>
+            </form>
+          </div>
+
+          {/* Navigation Footer */}
+          <div className="mt-8 text-center">
+            <p className="text-zinc-500 text-xs mb-3">New to PulseAI?</p>
+            <button 
+              className="w-full py-2.5 px-4 border border-[#262626] rounded-full text-zinc-300 hover:text-white hover:bg-zinc-900 transition text-xs font-bold uppercase tracking-wider"
+              onClick={() => navigate("/signup")}
+            >
+              Create an account
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

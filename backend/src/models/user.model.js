@@ -5,11 +5,6 @@ const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  phone: { type: String, required: true, unique: true },
-  otpEmail: { type: String },
-  otpPhone: { type: String },
-  verifiedEmail: { type: Boolean, default: false },
-  verifiedPhone: { type: Boolean, default: false },
   dob: { type: String, required: false },
   gender: { type: String, enum: ['Male', 'Female'],required: false },
   
