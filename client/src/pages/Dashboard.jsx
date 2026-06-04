@@ -101,6 +101,26 @@ export default function Dashboard() {
     };
 
     fetchDashboardData();
+
+    // Event listener for workoutSaved event
+    const handleWorkoutSaved = () => {
+      console.log("workoutSaved event detected! Refreshing dashboard data...");
+      fetchDashboardData();
+    };
+
+    // Event listener for window focus
+    const handleWindowFocus = () => {
+      console.log("Window focused! Refreshing dashboard data as backup...");
+      fetchDashboardData();
+    };
+
+    window.addEventListener("workoutSaved", handleWorkoutSaved);
+    window.addEventListener("focus", handleWindowFocus);
+
+    return () => {
+      window.removeEventListener("workoutSaved", handleWorkoutSaved);
+      window.removeEventListener("focus", handleWindowFocus);
+    };
   }, []);
 
   // Format Helper for Exercise Type Names

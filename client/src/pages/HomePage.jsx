@@ -5,11 +5,11 @@ export default function HomePage() {
   const navigate = useNavigate()
 
   const handleStartTraining = () => {
-    const isLoggedIn = !!localStorage.getItem("token");
-    if (isLoggedIn) {
-      navigate("/dashboard");
+    const token = localStorage.getItem('token')
+    if (token) {
+      window.open(`http://127.0.0.1:5001/?token=${token}`, '_blank')
     } else {
-      navigate("/login");
+      window.open('http://127.0.0.1:5001/', '_blank')
     }
   };
 

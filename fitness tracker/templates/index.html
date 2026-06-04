@@ -769,38 +769,55 @@
     <!-- Workout Completion Summary Modal -->
     <div id="summaryModal" class="modal-overlay">
         <div class="modal-content">
-            <span class="modal-badge"><i class="fas fa-award"></i> Session Synced</span>
+            <span class="modal-badge"><i class="fas fa-dumbbell"></i> Workout Summary</span>
             <h2>Workout Complete</h2>
-            <p>Your workout stats have been evaluated and safely saved to MongoDB.</p>
+            <p>Review your performance stats before saving or discarding this session.</p>
             
-            <div class="modal-summary-grid">
+            <div class="modal-summary-grid" style="grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 28px;">
                 <div class="modal-summary-item">
                     <span class="item-label">Exercise</span>
                     <span class="item-value" id="modal-exercise">Push-up</span>
                 </div>
                 <div class="modal-summary-item">
-                    <span class="item-label">Reps Completed</span>
+                    <span class="item-label">Total Reps</span>
                     <span class="item-value text-orange" id="modal-reps">0</span>
                 </div>
                 <div class="modal-summary-item">
-                    <span class="item-label">Avg Accuracy</span>
-                    <span class="item-value text-green" id="modal-accuracy">100%</span>
+                    <span class="item-label">Valid Reps</span>
+                    <span class="item-value text-green" id="modal-valid-reps">0</span>
                 </div>
                 <div class="modal-summary-item">
+                    <span class="item-label">Accuracy</span>
+                    <span class="item-value text-green" id="modal-accuracy">100%</span>
+                </div>
+                <div class="modal-summary-item" style="grid-column: span 2;">
                     <span class="item-label">Duration</span>
-                    <span class="item-value font-mono" id="modal-duration">00:00</span>
+                    <span class="item-value font-mono" id="modal-duration">00:00:00</span>
+                </div>
+                <div class="modal-summary-item" style="grid-column: span 2;">
+                    <span class="item-label">Performance Rating</span>
+                    <span class="item-value text-orange" id="modal-rating">Good</span>
+                </div>
+                <div class="modal-summary-item" style="grid-column: span 2;">
+                    <span class="item-label">Completion Time</span>
+                    <span class="item-value text-green" id="modal-completion-time">-</span>
                 </div>
             </div>
             
             <div class="modal-footer">
-                <button id="modalViewAnalyticsBtn" class="btn-modal-secondary">
-                    <i class="fas fa-chart-line"></i> Dashboard
+                <button id="modalDiscardBtn" class="btn-modal-secondary">
+                    <i class="fas fa-trash-alt"></i> Discard Session
                 </button>
-                <button id="modalNewSessionBtn" class="btn-modal-primary">
-                    New Session
+                <button id="modalSaveBtn" class="btn-modal-primary">
+                    <i class="fas fa-save"></i> Save Session
                 </button>
             </div>
         </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" style="position: fixed; bottom: 24px; right: 24px; background: #22c55e; color: white; padding: 12px 24px; border-radius: 8px; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; z-index: 10000; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+        Workout Saved Successfully!
     </div>
 
     <script>
@@ -817,6 +834,19 @@
             const confidenceBar = document.getElementById('confidence-bar');
             const confidenceValue = document.getElementById('confidence-value');
             const summaryModal = document.getElementById('summaryModal');
+            const modalSaveBtn = document.getElementById('modalSaveBtn');
+            const modalDiscardBtn = document.getElementById('modalDiscardBtn');
+            
+            // Session ID Generation
+            function generateUniqueId() {
+                return 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            }
+            let currentSessionId = generateUniqueId();
+            
+            function resetSessionId() {
+                currentSessionId = generateUniqueId();
+                console.log("New session ID generated:", currentSessionId);
+            }
             
             // Start/Stop button
             startStopBtn.addEventListener('click', function() {
@@ -860,21 +890,6 @@
                 });
             });
 
-            // Modal Button Events
-            document.getElementById('modalNewSessionBtn').addEventListener('click', function() {
-                summaryModal.classList.remove('open');
-                fetch('/reset')
-                    .then(response => response.json())
-                    .then(data => console.log(data))
-                    .catch(error => console.error('Error reset:', error));
-            });
-
-            document.getElementById('modalViewAnalyticsBtn').addEventListener('click', function() {
-                window.location.href = 'http://localhost:5173/dashboard';
-            });
-            
-            let lastSavedWorkout = null;
-
             function formatExerciseName(type) {
                 if (!type) return "";
                 if (type === "curlup" || type === "bicep_curl") return "Bicep Curl";
@@ -884,54 +899,182 @@
                 return type.charAt(0).toUpperCase() + type.slice(1);
             }
 
-            function saveWorkoutSession(state) {
-                const sessionKey = `${state.exercise_type}_${state.count}_${state.elapsed_time}`;
-                if (lastSavedWorkout === sessionKey) return;
-                lastSavedWorkout = sessionKey;
+            let currentSessionState = null;
 
-                console.log("Saving workout session:", state);
-                let displayExerciseType = state.exercise_type === "curlup" ? "bicep_curl" : state.exercise_type;
-
-                const payload = {
-                    exerciseType: displayExerciseType,
-                    reps: state.count,
-                    duration: state.elapsed_time,
-                    averageConfidence: state.average_confidence || state.confidence_score,
-                    validReps: state.valid_reps !== undefined ? state.valid_reps : state.count,
-                    invalidReps: state.invalid_reps !== undefined ? state.invalid_reps : 0
-                };
-
-                // Display modal instantly with values before POST completion
+            function showWorkoutSummaryModal(state) {
+                currentSessionState = state;
+                
+                // 1. Exercise Type
                 document.getElementById('modal-exercise').textContent = formatExerciseName(state.exercise_type);
+                // 2. Total Reps
                 document.getElementById('modal-reps').textContent = state.count;
-                const accuracy = state.count > 0 ? Math.round(((state.valid_reps !== undefined ? state.valid_reps : state.count) / state.count) * 100) : 100;
+                // 3. Valid Reps
+                const valid = state.valid_reps !== undefined ? state.valid_reps : state.count;
+                document.getElementById('modal-valid-reps').textContent = valid;
+                // 4. Accuracy %
+                const accuracy = state.count > 0 ? Math.round((valid / state.count) * 100) : 100;
                 document.getElementById('modal-accuracy').textContent = `${accuracy}%`;
+                // 5. Duration
                 document.getElementById('modal-duration').textContent = state.elapsed_time;
+                
+                // 6. Performance Rating
+                // Rating Rules:
+                // > 95% = Elite
+                // 90–95% = Excellent
+                // 80–89% = Good
+                // <80% = Needs Improvement
+                let rating = "Needs Improvement";
+                if (accuracy > 95) {
+                    rating = "Elite";
+                } else if (accuracy >= 90) {
+                    rating = "Excellent";
+                } else if (accuracy >= 80) {
+                    rating = "Good";
+                }
+                const ratingEl = document.getElementById('modal-rating');
+                ratingEl.textContent = rating;
+                
+                // 7. Completion Time
+                const completionTime = new Date().toLocaleTimeString();
+                document.getElementById('modal-completion-time').textContent = completionTime;
+                
+                // Reset Save button UI state
+                modalSaveBtn.disabled = false;
+                modalSaveBtn.innerHTML = '<i class="fas fa-save"></i> Save Session';
+                modalDiscardBtn.disabled = false;
                 
                 // Show modal overlay
                 summaryModal.classList.add('open');
+            }
+
+            // Save Session Button click handler
+            modalSaveBtn.addEventListener('click', function() {
+                if (!currentSessionState) return;
+                
+                // Disable button and prevent multiple clicks
+                modalSaveBtn.disabled = true;
+                modalSaveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+                modalDiscardBtn.disabled = true;
+
+                let displayExerciseType = currentSessionState.exercise_type === "curlup" ? "bicep_curl" : currentSessionState.exercise_type;
+
+                const avgConfidence = (currentSessionState.average_confidence !== undefined && currentSessionState.average_confidence !== null) 
+                    ? currentSessionState.average_confidence 
+                    : ((currentSessionState.averageConfidence !== undefined && currentSessionState.averageConfidence !== null) 
+                        ? currentSessionState.averageConfidence 
+                        : ((currentSessionState.confidence_score !== undefined && currentSessionState.confidence_score !== null) 
+                            ? currentSessionState.confidence_score 
+                            : ((currentSessionState.confidenceScore !== undefined && currentSessionState.confidenceScore !== null) 
+                                ? currentSessionState.confidenceScore 
+                                : 0)));
+
+                const payload = {
+                    sessionId: currentSessionId,
+                    exerciseType: displayExerciseType,
+                    reps: currentSessionState.count !== undefined ? currentSessionState.count : 0,
+                    duration: currentSessionState.elapsed_time || "00:00:00",
+                    averageConfidence: avgConfidence,
+                    validReps: currentSessionState.valid_reps !== undefined ? currentSessionState.valid_reps : (currentSessionState.count !== undefined ? currentSessionState.count : 0),
+                    invalidReps: currentSessionState.invalid_reps !== undefined ? currentSessionState.invalid_reps : 0
+                };
+
+                console.log("WORKOUT PAYLOAD:", payload);
+
+                // Get token from URL query parameter or fallback to localStorage
+                const urlParams = new URLSearchParams(window.location.search);
+                let token = urlParams.get('token');
+                if (token) {
+                    localStorage.setItem('token', token);
+                } else {
+                    token = localStorage.getItem('token');
+                }
+
+                const headers = {
+                    'Content-Type': 'application/json'
+                };
+                if (token) {
+                    headers['Authorization'] = `Bearer ${token}`;
+                }
+
+                console.log("AUTH TOKEN:", token);
+                console.log("REQUEST HEADERS:", headers);
 
                 fetch('http://localhost:5000/api/workouts/log', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: headers,
                     body: JSON.stringify(payload),
                     credentials: 'include'
                 })
                 .then(response => {
+                    if (response.status === 409) {
+                        throw new Error('Duplicate session: This workout has already been saved.');
+                    }
                     if (!response.ok) {
                         throw new Error('Failed to log workout');
                     }
                     return response.json();
                 })
                 .then(data => {
-                    console.log('Workout logged successfully to database:', data);
+                    console.log('Workout logged successfully:', data);
+                    
+                    // Show success toast
+                    const toast = document.getElementById('toastNotification');
+                    toast.style.display = 'block';
+                    setTimeout(() => {
+                        toast.style.display = 'none';
+                    }, 3000);
+                    
+                    // Dispatch workoutSaved event
+                    window.dispatchEvent(new Event("workoutSaved"));
+                    if (window.opener) {
+                        try {
+                            window.opener.dispatchEvent(new Event("workoutSaved"));
+                        } catch (e) {
+                            console.error("Failed to dispatch to opener:", e);
+                        }
+                    }
+
+                    // Reset session state and close modal
+                    summaryModal.classList.remove('open');
+                    modalDiscardBtn.disabled = false;
+                    
+                    // Reset backend tracker state
+                    fetch('/reset')
+                        .then(r => r.json())
+                        .then(d => {
+                            console.log('Backend reset completed');
+                            resetSessionId();
+                        })
+                        .catch(err => {
+                            console.error('Error resetting backend:', err);
+                            resetSessionId();
+                        });
                 })
                 .catch(error => {
                     console.error('Error saving workout:', error);
+                    alert(error.message || 'Error saving workout. Please try again.');
+                    modalSaveBtn.disabled = false;
+                    modalSaveBtn.innerHTML = '<i class="fas fa-save"></i> Save Session';
+                    modalDiscardBtn.disabled = false;
                 });
-            }
+            });
+
+            // Discard Session Button click handler
+            modalDiscardBtn.addEventListener('click', function() {
+                summaryModal.classList.remove('open');
+                
+                // Reset backend tracker state
+                fetch('/reset')
+                    .then(r => r.json())
+                    .then(d => {
+                        console.log('Backend reset completed after discard');
+                        resetSessionId();
+                    })
+                    .catch(err => {
+                        console.error('Error resetting backend:', err);
+                        resetSessionId();
+                    });
+            });
 
             let previousState = null;
 
@@ -1009,13 +1152,16 @@
                             }
                         });
 
-                        // --- Automatic Session Persistence ---
-                        if (previousState) {
+                        // --- Workout Session End detection ---
+                        if (previousState && !summaryModal.classList.contains('open')) {
                             if (previousState.status === 'RUNNING' && data.status === 'PAUSED' && previousState.count > 0) {
-                                saveWorkoutSession(previousState);
+                                showWorkoutSummaryModal(previousState);
                             }
-                            else if ((previousState.exercise_type !== data.exercise_type || (previousState.count > 0 && data.count === 0)) && previousState.count > 0) {
-                                saveWorkoutSession(previousState);
+                            else if (previousState.exercise_type !== data.exercise_type && previousState.count > 0) {
+                                showWorkoutSummaryModal(previousState);
+                            }
+                            else if (previousState.count > 0 && data.count === 0) {
+                                showWorkoutSummaryModal(previousState);
                             }
                         }
                         

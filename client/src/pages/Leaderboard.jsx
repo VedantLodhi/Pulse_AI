@@ -46,6 +46,26 @@ export default function Leaderboard() {
     };
 
     fetchLeaderboardData();
+
+    // Event listener for workoutSaved event
+    const handleWorkoutSaved = () => {
+      console.log("workoutSaved event detected! Refreshing leaderboard data...");
+      fetchLeaderboardData();
+    };
+
+    // Event listener for window focus
+    const handleWindowFocus = () => {
+      console.log("Window focused! Refreshing leaderboard data as backup...");
+      fetchLeaderboardData();
+    };
+
+    window.addEventListener("workoutSaved", handleWorkoutSaved);
+    window.addEventListener("focus", handleWindowFocus);
+
+    return () => {
+      window.removeEventListener("workoutSaved", handleWorkoutSaved);
+      window.removeEventListener("focus", handleWindowFocus);
+    };
   }, []);
 
   if (isLoading) {
