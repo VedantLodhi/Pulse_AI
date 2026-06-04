@@ -1,154 +1,196 @@
 # 🏋️ PulseAI
 
-**AI-Powered Fitness Tracking & Workout Analysis Platform**
+## AI-Powered Fitness Tracking & Workout Analysis Platform
 
-PulseAI is an intelligent fitness platform that uses **Computer Vision**, **Pose Estimation**, and **AI-powered analytics** to help users track workouts, count repetitions, monitor exercise form, and gain performance insights in real time.
+PulseAI is a full-stack AI fitness platform that combines Computer Vision, Pose Estimation, and Real-Time Analytics to help users track workouts, monitor exercise form, count repetitions automatically, and analyze performance metrics with precision.
 
-The goal of PulseAI is to make fitness tracking smarter by combining traditional workout logging with AI-driven motion analysis.
+Using MediaPipe and OpenCV, PulseAI transforms a standard webcam into an intelligent fitness assistant capable of providing real-time movement analysis and workout insights.
 
 ---
 
-## 🚀 Features
+## 🚀 Key Features
 
 ### 🎯 Real-Time Exercise Tracking
 
-* Detects body posture using computer vision
-* Tracks workout movements in real time
-* Counts exercise repetitions automatically
+* Live body pose detection using MediaPipe
+* Automatic repetition counting
+* Real-time workout monitoring
+* Multiple exercise support (Push-ups, Squats, Sit-ups, Bicep Curls)
 
 ### 🤖 AI-Powered Form Analysis
 
-* Monitors exercise posture
-* Identifies incorrect movement patterns
-* Provides feedback for better workout execution
+* Detects exercise posture and movement patterns
+* Measures form accuracy and workout quality
+* Provides performance feedback based on workout execution
+* Tracks valid and invalid repetitions
 
-### 📊 Workout Analytics
+### 📊 Advanced Workout Analytics
 
-* Track completed exercises
-* Monitor workout progress
-* Analyze performance over time
+* Workout history tracking
+* Exercise distribution visualization
+* Repetition progress monitoring
+* Accuracy and performance metrics
+* Streak tracking and activity logs
 
-### 👤 User Management
+### 🏆 Competitive Leaderboard System
 
-* Secure authentication
-* Personalized workout data
-* Individual fitness tracking dashboard
+* Global athlete rankings
+* Dynamic scoring system
+* Performance-based achievements
+* Workout streak rewards
 
-### ⚡ Performance Optimization
+### 👤 User Management & Authentication
 
-* Optimized backend APIs
-* Faster response times
-* Scalable architecture for future AI features
+* JWT Authentication
+* Google OAuth Login
+* Secure user sessions
+* Personalized athlete dashboard
+
+### 💾 Workout Session Persistence
+
+* Save or discard completed workout sessions
+* Real-time synchronization with dashboard
+* Duplicate workout protection
+* Activity history management
 
 ---
 
-# 🛠 Tech Stack
+## 🛠 Tech Stack
 
-## Frontend
+### Frontend
 
 * React.js
-* JavaScript
+* JavaScript (ES6+)
 * HTML5
 * CSS3
+* Axios
+* React Router
 
-## Backend
+### Backend
 
 * Node.js
 * Express.js
 
-## Database
+### Database
 
-* MongoDB
+* MongoDB Atlas
+* Mongoose ODM
 
-## AI / Computer Vision
+### AI & Computer Vision
 
 * MediaPipe
 * OpenCV
+* Python
+* Flask
 
-## Authentication
+### Authentication & Security
 
 * JWT Authentication
+* Google OAuth
+* Password Hashing (bcrypt)
+
+### Deployment
+
+* Vercel (Frontend)
+* Render (Backend)
 
 ---
 
-# 🏗 System Architecture
+## 📈 Core Functionalities
 
-User → Frontend (React)
+### Smart Rep Counting
 
-↓
+Calculates repetitions using body joint angles and movement thresholds instead of simple motion detection, improving accuracy during workouts.
 
-Backend APIs (Node.js + Express)
+### Pose Estimation
 
-↓
+Uses MediaPipe's landmark detection system to track body movements and evaluate exercise execution in real time.
 
-MongoDB Database
+### Workout Quality Assessment
 
-↓
+Generates form quality scores and dynamic feedback based on workout accuracy and posture consistency.
 
-MediaPipe + OpenCV
+### Session Analytics
 
-↓
-
-Pose Detection & Exercise Analysis
-
-↓
-
-Workout Insights & Tracking Dashboard
+Stores workout sessions, calculates performance metrics, tracks streaks, and updates athlete rankings automatically.
 
 ---
 
-# 📌 Key Challenges Solved
+## 📸 Application Modules
 
-### Accurate Rep Counting
+### Home Page
 
-Built logic to calculate repetitions based on body joint angles and movement patterns.
+Modern landing page showcasing platform capabilities.
 
-### Real-Time Pose Detection
+### Athlete Dashboard
 
-Integrated MediaPipe and OpenCV for smooth motion tracking.
+* Workout statistics
+* Exercise analytics
+* Progress graphs
+* Workout history
+* Achievement tracking
 
-### Performance Optimization
+### AI Training Studio
 
-Reduced unnecessary processing and optimized API interactions for better responsiveness.
+* Live camera feed
+* Pose detection overlay
+* Real-time rep counting
+* Workout summary modal
+* Session save/discard workflow
 
-### Data Persistence
+### Leaderboard
 
-Designed a backend system to securely store workout history and user progress.
+* Athlete rankings
+* Performance scoring
+* Achievement highlights
+
+### Challenges
+
+* Fitness challenge participation
+* Progress tracking
+* Goal completion monitoring
 
 ---
 
-# 📷 Use Cases
+## 💡 Future Enhancements
 
-* Home Workouts
-* Gym Training
-* Fitness Progress Tracking
-* Exercise Form Monitoring
-* AI-Based Workout Assistance
-
----
-
-# 💡 Future Improvements
-
-* Personalized AI Workout Recommendations
+* AI Workout Recommendations
+* Personalized Fitness Coach
+* Nutrition & Diet Tracking
 * Exercise Recognition using Deep Learning
-* Nutrition Tracking
-* AI Fitness Coach
-* Progress Prediction & Goal Tracking
-* Mobile Application Support
+* Mobile Application (React Native)
+* Weekly & Monthly Performance Reports
+* Email Workout Summaries
+* Wearable Device Integration
 
 ---
 
-# 📚 What I Learned
+## 📚 Learning Outcomes
 
-Through PulseAI, I gained hands-on experience with:
+This project helped me gain practical experience in:
 
-* Computer Vision fundamentals
-* Pose Estimation using MediaPipe
-* OpenCV integration
-* Backend API development
-* MongoDB data modeling
-* Performance optimization
-* Building AI-powered applications
+* Computer Vision
+* Pose Estimation
+* MediaPipe Integration
+* OpenCV Processing
+* Full-Stack MERN Development
+* REST API Design
+* Authentication & Security
+* MongoDB Data Modeling
+* Real-Time Analytics Systems
+* AI-Powered Application Development
+
+---
+
+## ⭐ Project Highlights
+
+* Real-Time Computer Vision Application
+* AI-Based Exercise Analysis
+* Full-Stack MERN Architecture
+* JWT & Google Authentication
+* Interactive Dashboard & Leaderboard
+* Production Deployment Ready
+* End-to-End Fitness Tracking Workflow
 
 ---
 
@@ -156,7 +198,7 @@ Through PulseAI, I gained hands-on experience with:
 
 **Vedant Lodhi**
 
-* GitHub: https://github.com/VedantLodhi
-* LinkedIn: https://www.linkedin.com/in/vedant-lodhi/
+GitHub: https://github.com/VedantLodhi
+LinkedIn: https://www.linkedin.com/in/vedant-lodhi/
 
-If you found this project interesting, consider giving it a ⭐.
+If you found this project useful, consider giving it a ⭐ and sharing feedback.
