@@ -62,7 +62,7 @@ export default function Login() {
           size: "large", 
           text: "continue_with",
           shape: "rectangular",
-          width: "320" // Matches form max-width
+          width: "380" // Matches form max-width
         }
       );
     }
@@ -145,8 +145,8 @@ export default function Login() {
       </div>
 
       {/* Right Side (40%) - Authentication Panel */}
-      <div className="w-full md:w-2/5 flex flex-col justify-center items-center px-6 py-12 md:px-12 bg-[#0A0A0A] border-l border-[#262626]/80 mt-16 md:mt-0">
-        <div className="w-full max-w-sm">
+      <div className="w-full md:w-2/5 flex flex-col justify-center items-center px-6 py-12 md:px-12 bg-[#0A0A0A] border-l border-zinc-900 mt-16 md:mt-0">
+        <div className="w-full max-w-md">
           {/* Logo header (only visible on mobile) */}
           <div className="flex md:hidden flex-col items-center mb-8">
             <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center text-white font-black text-xl italic border border-[#FF6B00] mb-2">
@@ -165,7 +165,7 @@ export default function Login() {
           </div>
 
           {/* Form container */}
-          <div className="bg-[#171717]/80 border border-[#262626] rounded-2xl p-6 md:p-8 shadow-2xl backdrop-blur-md">
+          <div className="bg-[#111111]/90 border border-zinc-800/80 rounded-2xl p-8 md:p-10 shadow-[0_0_50px_rgba(0,0,0,0.8),0_0_20px_rgba(255,107,0,0.05)] backdrop-blur-lg">
             {/* Primary CTA: Google Sign In */}
             <div className="mb-6">
               <label className="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-3 text-center">
@@ -174,22 +174,22 @@ export default function Login() {
               <div className="flex justify-center w-full">
                 <div 
                   id="googleSignInBtn" 
-                  className="w-full max-w-[320px] rounded-lg transition-all duration-300 hover:ring-2 hover:ring-[#FF6B00] hover:shadow-[0_0_12px_rgba(255,107,0,0.3)] overflow-hidden"
+                  className="w-full max-w-[380px] rounded-lg transition-all duration-300 hover:ring-2 hover:ring-[#FF6B00] hover:shadow-[0_0_12px_rgba(255,107,0,0.3)] overflow-hidden"
                 ></div>
               </div>
             </div>
 
             {/* Separator OR */}
-            <div className="flex items-center justify-between my-5">
-              <hr className="w-full border-[#262626]" />
+            <div className="flex items-center justify-between my-6">
+              <hr className="w-full border-zinc-850" />
               <span className="text-[9px] text-zinc-500 px-3 font-bold tracking-widest uppercase">OR</span>
-              <hr className="w-full border-[#262626]" />
+              <hr className="w-full border-zinc-850" />
             </div>
 
             {/* Secondary Option: Email Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label htmlFor="email" className="block text-[10px] font-bold text-zinc-400 mb-1.5 uppercase tracking-wider">
+                <label htmlFor="email" className="block text-[11px] font-bold text-zinc-400 mb-2 uppercase tracking-widest">
                   Email Address
                 </label>
                 <input
@@ -201,18 +201,18 @@ export default function Login() {
                     setFormData({ ...formData, email: e.target.value })
                   }
                   required
-                  className="w-full px-3 py-2 bg-black border border-[#262626] rounded-md focus:outline-none focus:ring-1 focus:ring-[#FF6B00] focus:border-[#FF6B00] text-sm text-white placeholder-zinc-700 transition"
+                  className="w-full px-4 py-3 bg-zinc-950 border border-zinc-850 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF6B00]/25 focus:border-[#FF6B00] hover:border-zinc-700 text-sm text-white placeholder-zinc-700 transition-all duration-200"
                 />
               </div>
 
               <div>
-                <div className="flex justify-between items-center mb-1.5">
-                  <label htmlFor="password" className="block text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
+                <div className="flex justify-between items-center mb-2">
+                  <label htmlFor="password" className="block text-[11px] font-bold text-zinc-400 uppercase tracking-widest">
                     Password
                   </label>
                   <Link
                     to="/resetpassword"
-                    className="text-[10px] text-zinc-500 hover:text-white font-semibold transition"
+                    className="text-[10px] text-zinc-550 hover:text-white font-semibold transition"
                   >
                     Forgot?
                   </Link>
@@ -226,13 +226,13 @@ export default function Login() {
                     setFormData({ ...formData, password: e.target.value })
                   }
                   required
-                  className="w-full px-3 py-2 bg-black border border-[#262626] rounded-md focus:outline-none focus:ring-1 focus:ring-[#FF6B00] focus:border-[#FF6B00] text-sm text-white placeholder-zinc-700 transition"
+                  className="w-full px-4 py-3 bg-zinc-950 border border-zinc-850 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF6B00]/25 focus:border-[#FF6B00] hover:border-zinc-700 text-sm text-white placeholder-zinc-700 transition-all duration-200"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-[#FF6B00] hover:bg-[#FF6B00]/90 text-white px-4 py-2.5 rounded-md transition-colors text-xs font-bold uppercase tracking-wider mt-2 shadow-lg"
+                className="w-full bg-[#FF6B00] hover:bg-[#ff802b] text-white px-5 py-3.5 rounded-xl transition-all duration-200 text-xs font-bold uppercase tracking-widest mt-4 shadow-lg hover:shadow-[0_0_20px_rgba(255,107,0,0.3)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
               >
                 Sign in with Email
               </button>
@@ -243,7 +243,7 @@ export default function Login() {
           <div className="mt-8 text-center">
             <p className="text-zinc-500 text-xs mb-3">New to PulseAI?</p>
             <button 
-              className="w-full py-2.5 px-4 border border-[#262626] rounded-full text-zinc-300 hover:text-white hover:bg-zinc-900 transition text-xs font-bold uppercase tracking-wider"
+              className="w-full py-3 px-4 border border-zinc-850 rounded-full text-zinc-300 hover:text-white hover:bg-zinc-900 hover:border-zinc-700 transition-all duration-200 text-xs font-bold uppercase tracking-widest cursor-pointer"
               onClick={() => navigate("/signup")}
             >
               Create an account

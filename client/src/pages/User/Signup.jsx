@@ -61,7 +61,7 @@ const Signup = () => {
           size: "large", 
           text: "signup_with", // Displays "Sign up with Google"
           shape: "rectangular",
-          width: "320"
+          width: "380"
         }
       );
     }
@@ -158,8 +158,8 @@ const Signup = () => {
       </div>
 
       {/* Right Side (40%) - Authentication Panel */}
-      <div className="w-full md:w-2/5 flex flex-col justify-center items-center px-6 py-12 md:px-12 bg-[#0A0A0A] border-l border-[#262626]/80 mt-16 md:mt-0">
-        <div className="w-full max-w-sm">
+      <div className="w-full md:w-2/5 flex flex-col justify-center items-center px-6 py-12 md:px-12 bg-[#0A0A0A] border-l border-zinc-900 mt-16 md:mt-0">
+        <div className="w-full max-w-md">
           {/* Logo header (only visible on mobile) */}
           <div className="flex md:hidden flex-col items-center mb-8">
             <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center text-white font-black text-xl italic border border-[#FF6B00] mb-2">
@@ -178,7 +178,7 @@ const Signup = () => {
           </div>
 
           {/* Form container */}
-          <div className="bg-[#171717]/80 border border-[#262626] rounded-2xl p-6 shadow-2xl backdrop-blur-md">
+          <div className="bg-[#111111]/90 border border-zinc-800/80 rounded-2xl p-8 md:p-10 shadow-[0_0_50px_rgba(0,0,0,0.8),0_0_20px_rgba(255,107,0,0.05)] backdrop-blur-lg">
             {error && (
               <div className="bg-red-950/45 border border-red-900/60 text-red-400 px-4 py-2.5 rounded-lg text-xs font-semibold mb-4 text-center">
                 {error}
@@ -199,22 +199,22 @@ const Signup = () => {
               <div className="flex justify-center w-full">
                 <div 
                   id="googleSignUpBtn" 
-                  className="w-full max-w-[320px] rounded-lg transition-all duration-300 hover:ring-2 hover:ring-[#FF6B00] hover:shadow-[0_0_12px_rgba(255,107,0,0.3)] overflow-hidden"
+                  className="w-full max-w-[380px] rounded-lg transition-all duration-300 hover:ring-2 hover:ring-[#FF6B00] hover:shadow-[0_0_12px_rgba(255,107,0,0.3)] overflow-hidden"
                 ></div>
               </div>
             </div>
 
             {/* Separator OR */}
-            <div className="flex items-center justify-between my-5">
-              <hr className="w-full border-[#262626]" />
+            <div className="flex items-center justify-between my-6">
+              <hr className="w-full border-zinc-850" />
               <span className="text-[9px] text-zinc-500 px-3 font-bold tracking-widest uppercase">OR</span>
-              <hr className="w-full border-[#262626]" />
+              <hr className="w-full border-zinc-850" />
             </div>
 
             {/* Secondary Option: Credentials Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label htmlFor="name" className="block text-[10px] font-bold text-zinc-400 mb-1.5 uppercase tracking-wider">
+                <label htmlFor="name" className="block text-[11px] font-bold text-zinc-400 mb-2 uppercase tracking-widest">
                   Full Name
                 </label>
                 <input 
@@ -224,13 +224,13 @@ const Signup = () => {
                   placeholder="John Doe"
                   value={formData.name} 
                   onChange={handleChange} 
-                  className="w-full px-3 py-2 bg-black border border-[#262626] rounded-md focus:outline-none focus:ring-1 focus:ring-[#FF6B00] focus:border-[#FF6B00] text-sm text-white placeholder-zinc-700 transition" 
+                  className="w-full px-4 py-3 bg-zinc-950 border border-zinc-850 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF6B00]/25 focus:border-[#FF6B00] hover:border-zinc-700 text-sm text-white placeholder-zinc-700 transition-all duration-200" 
                   required 
                 />
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-[10px] font-bold text-zinc-400 mb-1.5 uppercase tracking-wider">
+                <label htmlFor="email" className="block text-[11px] font-bold text-zinc-400 mb-2 uppercase tracking-widest">
                   Email Address
                 </label>
                 <input 
@@ -240,14 +240,14 @@ const Signup = () => {
                   placeholder="you@example.com"
                   value={formData.email} 
                   onChange={handleChange} 
-                  className="w-full px-3 py-2 bg-black border border-[#262626] rounded-md focus:outline-none focus:ring-1 focus:ring-[#FF6B00] focus:border-[#FF6B00] text-sm text-white placeholder-zinc-700 transition" 
+                  className="w-full px-4 py-3 bg-zinc-950 border border-zinc-850 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF6B00]/25 focus:border-[#FF6B00] hover:border-zinc-700 text-sm text-white placeholder-zinc-700 transition-all duration-200" 
                   required 
                 />
               </div>
 
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="password" className="block text-[10px] font-bold text-zinc-400 mb-1.5 uppercase tracking-wider">
+                  <label htmlFor="password" className="block text-[11px] font-bold text-zinc-400 mb-2 uppercase tracking-widest">
                     Password
                   </label>
                   <input 
@@ -257,12 +257,12 @@ const Signup = () => {
                     placeholder="••••••••"
                     value={formData.password} 
                     onChange={handleChange} 
-                    className="w-full px-3 py-2 bg-black border border-[#262626] rounded-md focus:outline-none focus:ring-1 focus:ring-[#FF6B00] focus:border-[#FF6B00] text-sm text-white placeholder-zinc-700 transition" 
+                    className="w-full px-4 py-3 bg-zinc-950 border border-zinc-850 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF6B00]/25 focus:border-[#FF6B00] hover:border-zinc-700 text-sm text-white placeholder-zinc-700 transition-all duration-200" 
                     required 
                   />
                 </div>
                 <div>
-                  <label htmlFor="confirmPassword" className="block text-[10px] font-bold text-zinc-400 mb-1.5 uppercase tracking-wider">
+                  <label htmlFor="confirmPassword" className="block text-[11px] font-bold text-zinc-400 mb-2 uppercase tracking-widest">
                     Confirm Password
                   </label>
                   <input 
@@ -272,7 +272,7 @@ const Signup = () => {
                     placeholder="••••••••"
                     value={formData.confirmPassword} 
                     onChange={handleChange} 
-                    className="w-full px-3 py-2 bg-black border border-[#262626] rounded-md focus:outline-none focus:ring-1 focus:ring-[#FF6B00] focus:border-[#FF6B00] text-sm text-white placeholder-zinc-700 transition" 
+                    className="w-full px-4 py-3 bg-zinc-950 border border-zinc-850 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF6B00]/25 focus:border-[#FF6B00] hover:border-zinc-700 text-sm text-white placeholder-zinc-700 transition-all duration-200" 
                     required 
                   />
                 </div>
@@ -292,7 +292,7 @@ const Signup = () => {
 
               <button 
                 type="submit" 
-                className={`w-full py-2.5 rounded-md transition-colors text-xs font-bold uppercase tracking-wider mt-2 ${isFormValid ? 'bg-[#FF6B00] hover:bg-[#FF6B00]/90 text-white cursor-pointer shadow-lg' : 'bg-[#262626] text-zinc-550 cursor-not-allowed'}`} 
+                className={`w-full py-3.5 rounded-xl transition-all duration-200 text-xs font-bold uppercase tracking-widest mt-4 ${isFormValid ? 'bg-[#FF6B00] hover:bg-[#ff802b] text-white cursor-pointer shadow-lg hover:shadow-[0_0_20px_rgba(255,107,0,0.3)] hover:-translate-y-0.5 active:translate-y-0' : 'bg-[#262626] text-zinc-600 cursor-not-allowed'}`} 
                 disabled={!isFormValid || isLoading}
               >
                 {isLoading ? "Creating account..." : "Create Account"}
@@ -304,7 +304,7 @@ const Signup = () => {
           <div className="mt-8 text-center">
             <p className="text-zinc-500 text-xs mb-3">Already have an account?</p>
             <button 
-              className="w-full py-2.5 px-4 border border-[#262626] rounded-full text-zinc-300 hover:text-white hover:bg-zinc-900 transition text-xs font-bold uppercase tracking-wider"
+              className="w-full py-3 px-4 border border-zinc-850 rounded-full text-zinc-300 hover:text-white hover:bg-zinc-900 hover:border-zinc-700 transition-all duration-200 text-xs font-bold uppercase tracking-widest cursor-pointer"
               onClick={() => navigate("/login")}
             >
               Log in instead

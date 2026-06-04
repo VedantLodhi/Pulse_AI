@@ -799,7 +799,7 @@ def create_templates():
         return
         
     with open('templates/index.html', 'w') as f:
-        f.write('''<!DOCTYPE html>
+        f.write(r'''<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -840,9 +840,9 @@ def create_templates():
         }
         
         .container {
-            max-width: 1280px;
+            max-width: 1600px;
             margin: 0 auto;
-            padding: 24px;
+            padding: 32px 24px;
             position: relative;
             z-index: 10;
         }
@@ -1021,12 +1021,12 @@ def create_templates():
         }
         
         button {
-            padding: 12px 16px;
-            font-size: 12px;
+            padding: 16px 20px;
+            font-size: 14px;
             font-weight: 700;
             cursor: pointer;
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 12px;
             background-color: #0A0A0A;
             color: var(--text-main);
             transition: all 0.2s ease;
@@ -1046,20 +1046,29 @@ def create_templates():
             background: var(--primary);
             color: white;
             border: none;
-            font-weight: 800;
+            font-weight: 900;
             letter-spacing: 0.5px;
+            box-shadow: 0 4px 14px var(--primary-glow);
         }
 
         .btn-start-stop:hover {
-            background: #e05e00;
+            background: #ff802b;
+            box-shadow: 0 6px 20px rgba(255, 107, 0, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .btn-start-stop:active {
+            transform: translateY(0);
         }
         
         .btn-start-stop.running {
             background: var(--danger);
+            box-shadow: 0 4px 14px rgba(239, 68, 68, 0.2);
         }
 
         .btn-start-stop.running:hover {
-            background: #c92235;
+            background: #f87171;
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.35);
         }
         
         .btn-reset {
@@ -1093,12 +1102,12 @@ def create_templates():
         }
         
         .stat-value {
-            font-size: 72px;
+            font-size: 96px;
             font-weight: 900;
             line-height: 1;
-            margin: 8px 0;
+            margin: 10px 0;
             color: var(--text-main);
-            letter-spacing: -2px;
+            letter-spacing: -3px;
         }
 
         .stat-value.highlight {
@@ -1106,7 +1115,7 @@ def create_templates():
         }
         
         .stat-label {
-            font-size: 10px;
+            font-size: 12px;
             font-weight: 800;
             color: var(--text-muted);
             text-transform: uppercase;
@@ -1133,16 +1142,16 @@ def create_templates():
         }
 
         .capsule-label {
-            font-size: 8px;
+            font-size: 10px;
             font-weight: 800;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
         }
 
         .capsule-value {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 800;
             color: #FFFFFF;
             text-transform: uppercase;
@@ -1239,15 +1248,15 @@ def create_templates():
         }
         
         .exercise-card {
-            padding: 14px;
-            border-radius: 12px;
+            padding: 18px;
+            border-radius: 14px;
             background-color: #0A0A0A;
             border: 1px solid var(--border);
             cursor: pointer;
             transition: all 0.2s ease;
             text-align: center;
-            font-size: 11px;
-            font-weight: 700;
+            font-size: 12px;
+            font-weight: 800;
             color: var(--text-muted);
             display: flex;
             flex-direction: column;
@@ -1267,11 +1276,11 @@ def create_templates():
             background: #FFFFFF;
             border-color: #FFFFFF;
             color: #0A0A0A;
-            box-shadow: none;
+            box-shadow: 0 4px 14px rgba(255, 255, 255, 0.15);
         }
 
         .exercise-card i {
-            font-size: 16px;
+            font-size: 20px;
             opacity: 0.8;
         }
 
@@ -1315,13 +1324,13 @@ def create_templates():
         }
 
         .modal-content {
-            background: #171717;
+            background: #111111;
             border: 1px solid var(--border);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
-            border-radius: 16px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 40px rgba(255, 107, 0, 0.08);
+            border-radius: 20px;
             width: 90%;
-            max-width: 440px;
-            padding: 32px;
+            max-width: 480px;
+            padding: 40px;
             transform: scale(0.95);
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             text-align: center;
@@ -1339,7 +1348,7 @@ def create_templates():
             background-color: #0A0A0A;
             border: 1px solid var(--border);
             color: var(--primary);
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 800;
             border-radius: 4px;
             text-transform: uppercase;
@@ -1348,7 +1357,7 @@ def create_templates():
         }
 
         .modal-content h2 {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: 900;
             letter-spacing: -0.5px;
             color: var(--text-main);
@@ -1357,7 +1366,7 @@ def create_templates():
         }
 
         .modal-content p {
-            font-size: 12px;
+            font-size: 13px;
             color: var(--text-muted);
             margin-bottom: 24px;
         }
@@ -1372,14 +1381,14 @@ def create_templates():
         .modal-summary-item {
             background: #0A0A0A;
             border: 1px solid var(--border);
-            padding: 16px;
-            border-radius: 12px;
+            padding: 20px;
+            border-radius: 14px;
             text-align: center;
         }
 
         .modal-summary-item .item-label {
             display: block;
-            font-size: 8px;
+            font-size: 10px;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -1388,7 +1397,7 @@ def create_templates():
         }
 
         .modal-summary-item .item-value {
-            font-size: 18px;
+            font-size: 22px;
             font-weight: 900;
             color: var(--text-main);
         }
@@ -1411,23 +1420,28 @@ def create_templates():
             background: var(--primary);
             color: white;
             border: none;
-            font-weight: 800;
-            padding: 12px;
+            font-weight: 900;
+            padding: 14px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            border-radius: 12px;
+            cursor: pointer;
         }
 
         .btn-modal-primary:hover {
-            background: #e05e00;
+            background: #ff802b;
+            box-shadow: 0 4px 14px rgba(255, 107, 0, 0.25);
         }
 
         .btn-modal-secondary {
             background: #0A0A0A;
             border: 1px solid var(--border);
             color: var(--text-main);
-            font-weight: 700;
+            font-weight: 750;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            border-radius: 12px;
+            cursor: pointer;
         }
 
         .btn-modal-secondary:hover {
@@ -1713,27 +1727,35 @@ def create_templates():
                 const valid = state.valid_reps !== undefined ? state.valid_reps : state.count;
                 document.getElementById('modal-valid-reps').textContent = valid;
                 // 4. Accuracy %
-                const accuracy = state.count > 0 ? Math.round((valid / state.count) * 100) : 100;
+                const accuracy = state.count > 0 ? Math.round((valid / state.count) * 100) : 0;
                 document.getElementById('modal-accuracy').textContent = `${accuracy}%`;
                 // 5. Duration
                 document.getElementById('modal-duration').textContent = state.elapsed_time;
                 
                 // 6. Performance Rating
-                // Rating Rules:
-                // > 95% = Elite
-                // 90–95% = Excellent
-                // 80–89% = Good
-                // <80% = Needs Improvement
-                let rating = "Needs Improvement";
-                if (accuracy > 95) {
-                    rating = "Elite";
-                } else if (accuracy >= 90) {
-                    rating = "Excellent";
-                } else if (accuracy >= 80) {
-                    rating = "Good";
+                let rating = "Excellent Form";
+                let ratingColor = "#4ade80"; // Bright Green
+                
+                if (accuracy <= 30) {
+                    rating = "Major Improvement Needed";
+                    ratingColor = "#ef4444"; // Red
+                } else if (accuracy <= 50) {
+                    rating = "Needs Improvement";
+                    ratingColor = "#f97316"; // Red/Orange
+                } else if (accuracy <= 70) {
+                    rating = "Can Improve";
+                    ratingColor = "#ea580c"; // Orange
+                } else if (accuracy <= 85) {
+                    rating = "Good Effort";
+                    ratingColor = "#eab308"; // Yellow
+                } else if (accuracy <= 94) {
+                    rating = "Good Form";
+                    ratingColor = "#22c55e"; // Green
                 }
+
                 const ratingEl = document.getElementById('modal-rating');
                 ratingEl.textContent = rating;
+                ratingEl.style.color = ratingColor;
                 
                 // 7. Completion Time
                 const completionTime = new Date().toLocaleTimeString();

@@ -150,7 +150,7 @@ export const addUserDetails = async (req, res) => {
     // ✅ Log for debugging
     console.log("User ID from middleware:", userId);
 
-    const { dob, gender, weight, height, dailyCalorieGoal, fitnessGoal, activityLevel } = req.body;
+    const { dob, gender, weight, height, dailyCalorieGoal, fitnessGoal, activityLevel, age } = req.body;
 
     const user = await User.findById(userId);
     if (!user) {
@@ -159,6 +159,11 @@ export const addUserDetails = async (req, res) => {
 
     // ✅ Update only provided fields
     if (dob) user.dob = dob;
+    if (age !== undefined && age !== null) {
+      const currentYear = new Date().getFullYear();
+      const birthYear = currentYear - parseInt(age);
+      user.dob = `${birthYear}-01-01`;
+    }
     if (gender) user.gender = gender;
     if (weight) user.weight = weight;
     if (height) user.height = height;
@@ -207,6 +212,7 @@ export const addUserDetails = async (req, res) => {
         height: user.height,
         weight: user.weight,
         bmi: user.bmi,
+        dob: user.dob,
         dailyCalorieGoal: user.dailyCalorieGoal,
         fitnessGoal: user.fitnessGoal,
         activityLevel: user.activityLevel

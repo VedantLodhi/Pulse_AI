@@ -66,36 +66,36 @@ function Page3() {
           {/* Content */}
           <div className="relative min-h-screen flex flex-col items-center justify-center text-center px-4">
             <div className="max-w-3xl mx-auto">
-              <p className="text-[#e67e22] text-base md:text-xl mb-4">
+              <p className="text-[#FF6B00] text-base md:text-xl mb-4 font-bold uppercase tracking-widest">
                 The #1 Workout Connection
               </p>
 
-              <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight">
+              <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight uppercase tracking-tight">
                 Peak Performance.
                 <br />
                 Peak Results.
               </h1>
 
-              <p className="text-gray-300 text-sm md:text-base mb-8 max-w-xl mx-auto">
+              <p className="text-zinc-400 text-sm md:text-base mb-8 max-w-xl mx-auto leading-relaxed">
                 We work to build a better you, pushing beyond your limits and
                 achieving greatness through dedication and perseverance.
               </p>
 
               <button 
                 onClick={handleStartTraining}
-                className="bg-[#e67e22] text-white px-8 py-3 rounded-md text-xl font-bold hover:bg-[#d35400] transition-colors duration-300 mb-8 cursor-pointer"
+                className="bg-[#FF6B00] text-white px-10 py-4 rounded-xl text-lg font-black hover:bg-[#ff802b] transition-all hover:shadow-[0_0_20px_rgba(255,107,0,0.3)] hover:-translate-y-0.5 active:translate-y-0 mb-8 cursor-pointer uppercase tracking-widest"
               >
                 Start Training
               </button>
 
               <div 
                 onClick={handleWatchDemo}
-                className="flex items-center justify-center gap-3 cursor-pointer"
+                className="flex items-center justify-center gap-3 cursor-pointer group"
               >
-                <div className="w-10 h-10 border border-[#e67e22] rounded-full  text-[#e67e22] flex justify-center items-center">
-                  <Play />
+                <div className="w-10 h-10 border border-[#FF6B00] rounded-full text-[#FF6B00] flex justify-center items-center group-hover:bg-[#FF6B00]/10 transition-colors duration-250">
+                  <Play size={16} />
                 </div>
-                <p className="text-md text-gray-300">Watch Demo</p>
+                <p className="text-md text-zinc-400 group-hover:text-white transition-colors">Watch Demo</p>
               </div>
             </div>
           </div>
@@ -113,14 +113,14 @@ function Page3() {
           </div>
 
           {/* Header */}
-          <div className="relative bg-gray-200 flex items-center justify-center text-white text-2xl font-bold gap-4 px-2 py-6">
-            <div className="w-4 h-4 bg-[#e67e22] rounded-full"></div>
-            <div className="bg-gray-200 text-center">
-              <h1 className="text-xl tablet:text-4xl font-bold text-black">
+          <div className="relative bg-[#0F0F0F] flex items-center justify-center text-white text-2xl font-black gap-4 px-4 py-8 border-y border-zinc-900 shadow-inner">
+            <div className="w-3.5 h-3.5 bg-[#FF6B00] rounded-full shadow-[0_0_8px_#FF6B00]"></div>
+            <div className="bg-[#0F0F0F] text-center">
+              <h1 className="text-xl tablet:text-3xl font-black tracking-wider text-white uppercase">
                 TAKE THE NEXT STEP TO FITNESS
               </h1>
             </div>
-            <div className="w-4 h-4 bg-[#e67e22] rounded-full"></div>
+            <div className="w-3.5 h-3.5 bg-[#FF6B00] rounded-full shadow-[0_0_8px_#FF6B00]"></div>
           </div>
 
           {/* Main Content */}
@@ -136,7 +136,7 @@ function Page3() {
 
               <button 
                 onClick={handleStartTraining}
-                className="bg-[#e67e22] text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-[#d35400] transition-colors duration-300 mt-6 cursor-pointer"
+                className="bg-[#FF6B00] text-white px-10 py-4 rounded-xl text-lg font-black hover:bg-[#ff802b] transition-all hover:shadow-[0_0_20px_rgba(255,107,0,0.3)] hover:-translate-y-0.5 active:translate-y-0 mt-6 cursor-pointer uppercase tracking-widest"
               >
                 Start Meditation
               </button>
@@ -148,15 +148,14 @@ function Page3() {
         <div className="min-h-90 bg-gray-100">
           {/* Header */}
 
-          <div className="bg-gray-200 flex items-center justify-center text-white text-2xl font-bold gap-4 px-2 py-6">
-            <div className="w-4 h-4 bg-red-500 rounded-full"></div>
-            <div className="bg-gray-200 text-center">
-              <h1 className="text-xl tablet:text-4xl font-bold text-black">
-                TAKE THE NEXT STEP TO{" "}
-                <span className="text-[#e67e22]">PERFORMANCE</span>
+          <div className="bg-[#0F0F0F] flex items-center justify-center text-white text-2xl font-black gap-4 px-4 py-8 border-y border-zinc-900 shadow-inner">
+            <div className="w-3.5 h-3.5 bg-[#FF6B00] rounded-full shadow-[0_0_8px_#FF6B00]"></div>
+            <div className="bg-[#0F0F0F] text-center">
+              <h1 className="text-xl tablet:text-3xl font-black tracking-wider text-white uppercase">
+                TAKE THE NEXT STEP TO <span className="text-[#FF6B00]">PERFORMANCE</span>
               </h1>
             </div>
-            <div className="w-4 h-4 bg-red-500 rounded-full"></div>
+            <div className="w-3.5 h-3.5 bg-[#FF6B00] rounded-full shadow-[0_0_8px_#FF6B00]"></div>
           </div>
 
           {/* Categories Grid */}
@@ -197,90 +196,76 @@ function Page3() {
         </div>
       </section>
       <section>
-        <div className="bg-gray-200 flex items-center justify-center text-white text-2xl font-bold gap-4 px-2 py-6">
-          <div className="w-4 h-4 bg-red-500 rounded-full"></div>
-          <div className="bg-gray-200 text-center">
-            <h1 className="text-xl tablet:text-4xl font-bold text-black">
+        <div className="bg-[#0F0F0F] flex items-center justify-center text-white text-2xl font-black gap-4 px-4 py-8 border-y border-zinc-900 shadow-inner">
+          <div className="w-3.5 h-3.5 bg-[#FF6B00] rounded-full shadow-[0_0_8px_#FF6B00]"></div>
+          <div className="bg-[#0F0F0F] text-center">
+            <h1 className="text-xl tablet:text-3xl font-black tracking-wider text-white uppercase">
               MAKE YOUR SPOT ON THE LEADERBOARD
             </h1>
           </div>
-          <div className="w-4 h-4 bg-red-500 rounded-full"></div>
+          <div className="w-3.5 h-3.5 bg-[#FF6B00] rounded-full shadow-[0_0_8px_#FF6B00]"></div>
         </div>
 
-        <div className="min-h-screen bg-[#1a1a1a] flex flex-col items-center justify-center p-6">
+        <div className="min-h-screen bg-[#0A0A0A] flex flex-col items-center justify-center p-6 border-b border-zinc-900">
           <div className="container mx-auto max-w-6xl">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
               {/* Weekly Leader Card */}
-              <div className="bg-[#2a2a2a] rounded-[30px] p-8 transform rotate-[-5deg] h-[450px] mt-0 tablet:mt-10 transition-transform duration-300 hover:scale-105 hover:rotate-0">
+              <div className="bg-[#121212]/95 border border-zinc-800/80 rounded-[30px] p-8 transform rotate-[-3deg] h-[450px] mt-0 tablet:mt-10 transition-all duration-300 hover:scale-105 hover:rotate-0 hover:border-[#FF6B00]/40 shadow-2xl">
                 <div className="flex flex-col items-center justify-evenly h-full">
                   <img
                     src={img}
                     alt="Weekly Leader"
-                    className="w-24 h-24 rounded-full mb-6"
+                    className="w-24 h-24 rounded-full border-2 border-zinc-700 bg-zinc-900 mb-6 object-cover"
                   />
                   <div className="flex flex-col items-center justify-evenly h-2/4">
-                    <h2 className="text-white text-2xl font-bold mb-4">
+                    <h2 className="text-white text-2xl font-black uppercase tracking-tight mb-4">
                       Weekly Leader
                     </h2>
-                    <p className="w-full h-0.5 bg-gray-400"></p>
-                    <p className="text-gray-400 text-center text-sm leading-relaxed">
-                      Lorem Ipsum Dolor Sit Amet,
-                      <br />
-                      Consectetur Adipiscing Elit.
-                      <br />
-                      Vestibulum Faucibus Interdum
+                    <p className="w-full h-0.5 bg-zinc-800"></p>
+                    <p className="text-zinc-400 text-center text-sm leading-relaxed">
+                      Top weekly performance across curls, squats, and push-ups. Perfect form accuracy of 96%.
                     </p>
                   </div>
                 </div>
               </div>
 
               {/* Daily Leader Card */}
-              <div className="bg-[#2a2a2a] rounded-[30px] p-8 transform scale-110 relative h-[450px] mt-0 tablet:mt-10 transition-transform duration-300 hover:scale-115 hover:rotate-0">
-                <div className="absolute top-4 right-4 w-2 h-2 bg-red-500 rounded-full"></div>
+              <div className="bg-[#121212]/95 border border-[#FF6B00]/50 rounded-[30px] p-8 transform scale-110 relative h-[450px] mt-0 tablet:mt-10 transition-all duration-300 hover:scale-115 hover:rotate-0 shadow-[0_0_30px_rgba(255,107,0,0.15)]">
+                <div className="absolute top-6 right-6 w-3 h-3 bg-[#FF6B00] rounded-full animate-pulse shadow-[0_0_10px_#FF6B00]"></div>
                 <div className="flex flex-col items-center justify-evenly h-full">
                   <img
                     src={img}
                     alt="Daily Leader"
-                    className="w-24 h-24 rounded-full mb-6"
+                    className="w-24 h-24 rounded-full border-2 border-[#FF6B00] mb-6 object-cover"
                     style={{ backgroundColor: "#ffb6c1" }}
                   />
                   <div className="flex flex-col items-center justify-evenly h-2/4">
-                    <h2 className="text-white text-2xl font-bold mb-4">
+                    <h2 className="text-white text-2xl font-black uppercase tracking-tight mb-4">
                       Daily Leader
                     </h2>
-                    <p className="w-full h-0.5 bg-gray-400"></p>
-                    <p className="text-gray-400 text-center text-sm leading-relaxed">
-                      Lorem Ipsum Dolor Sit Amet,
-                      <br />
-                      Consectetur Adipiscing Elit.
-                      <br />
-                      Vestibulum Faucibus Interdum
-                      <br />
-                      Nunc, Et Eleifend Neque Sagittis Et.
+                    <p className="w-full h-0.5 bg-zinc-800"></p>
+                    <p className="text-zinc-400 text-center text-sm leading-relaxed">
+                      Daily leader with 420 repetitions completed with perfect posture. Live updates tracked by camera.
                     </p>
                   </div>
                 </div>
               </div>
 
               {/* Monthly Leader Card */}
-              <div className="bg-[#2a2a2a] rounded-[30px] p-8 transform rotate-[5deg] h-[450px] mt-0 tablet:mt-10 transition-transform duration-300 hover:scale-105 hover:rotate-0">
+              <div className="bg-[#121212]/95 border border-zinc-800/80 rounded-[30px] p-8 transform rotate-[3deg] h-[450px] mt-0 tablet:mt-10 transition-all duration-300 hover:scale-105 hover:rotate-0 hover:border-[#FF6B00]/40 shadow-2xl">
                 <div className="flex flex-col items-center justify-evenly h-full">
                   <img
                     src={img}
                     alt="Monthly Leader"
-                    className="w-24 h-24 rounded-full mb-6"
+                    className="w-24 h-24 rounded-full border-2 border-zinc-700 bg-zinc-900 mb-6 object-cover"
                   />
                   <div className="flex flex-col items-center justify-evenly h-2/4">
-                    <h2 className="text-white text-2xl font-bold mb-4">
+                    <h2 className="text-white text-2xl font-black uppercase tracking-tight mb-4">
                       Monthly Leader
                     </h2>
-                    <p className="w-full h-0.5 bg-gray-400"></p>
-                    <p className="text-gray-400 text-center text-sm leading-relaxed">
-                      Lorem Ipsum Dolor Sit Amet,
-                      <br />
-                      Consectetur Adipiscing Elit.
-                      <br />
-                      Vestibulum Faucibus Interdum
+                    <p className="w-full h-0.5 bg-zinc-800"></p>
+                    <p className="text-zinc-400 text-center text-sm leading-relaxed">
+                      Consistency champion with a 28-day active streak and over 4,500 total verified repetitions.
                     </p>
                   </div>
                 </div>
@@ -290,7 +275,7 @@ function Page3() {
             <div className="flex justify-center mt-16">
               <button 
                 onClick={() => navigate('/leaderboard')}
-                className="bg-[#e67e22] text-white font-bold py-4 px-12 rounded-lg text-xl cursor-pointer"
+                className="bg-[#FF6B00] hover:bg-[#ff802b] text-white font-black py-4.5 px-14 rounded-xl text-lg transition-all hover:shadow-[0_0_20px_rgba(255,107,0,0.3)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer uppercase tracking-widest"
               >
                 DARE TO LEAP
               </button>

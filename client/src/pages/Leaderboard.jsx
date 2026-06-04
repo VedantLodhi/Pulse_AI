@@ -166,8 +166,9 @@ export default function Leaderboard() {
   const thirdPlace = hasPodium ? leaderboard[2] : null;
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-white pt-24 pb-16 px-4 md:px-8">
-      {/* 1. Hero Section */}
+    <div className="min-h-screen bg-[#0A0A0A] text-white pt-24 pb-16 px-4 md:px-8 w-full flex flex-col items-center">
+      <div className="max-w-[1600px] w-full">
+        {/* 1. Hero Section */}
       <div className="text-center mb-12">
         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#FF6B00]/10 text-[#FF6B00] mb-3 border border-[#FF6B00]/20 uppercase tracking-widest">
           <Sparkles className="w-3.5 h-3.5" /> PULSEAI GLOBAL RANKING
@@ -184,7 +185,7 @@ export default function Leaderboard() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
         
         {/* 2. Top 3 Podium or Fallback Banner */}
-        <div className="lg:col-span-8 bg-[#171717] border border-[#262626] rounded-2xl p-6 md:p-8 flex flex-col justify-between">
+        <div className="lg:col-span-8 bg-gradient-to-br from-[#121212] via-[#171717] to-zinc-950/80 border border-zinc-800/80 rounded-2xl p-8 md:p-10 flex flex-col justify-between shadow-xl">
           <h2 className="text-lg font-bold uppercase tracking-wider text-white mb-8 flex items-center gap-2">
             <Trophy className="text-[#FF6B00] w-5 h-5" /> The Podium Bracket
           </h2>
@@ -207,7 +208,7 @@ export default function Leaderboard() {
               {secondPlace && (
                 <div className="flex flex-col items-center w-24 md:w-36">
                   <div className="relative mb-3">
-                    <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-zinc-800 flex items-center justify-center font-bold text-lg md:text-xl border-2 border-zinc-400">
+                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-zinc-850 flex items-center justify-center font-black text-xl md:text-2xl border-3 border-zinc-400 shadow-[0_0_20px_rgba(255,255,255,0.1)]">
                       {secondPlace.name.charAt(0).toUpperCase()}
                     </div>
                     <span className="absolute -bottom-1.5 -right-1.5 bg-zinc-400 text-black text-[9px] font-black w-5 h-5 rounded-full flex items-center justify-center">
@@ -226,7 +227,7 @@ export default function Leaderboard() {
               {firstPlace && (
                 <div className="flex flex-col items-center w-24 md:w-36">
                   <div className="relative mb-3">
-                    <div className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-yellow-950/40 flex items-center justify-center font-bold text-xl md:text-2xl border-2 border-[#FFD700] shadow-[0_0_15px_rgba(241,196,15,0.15)]">
+                    <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-yellow-950/40 flex items-center justify-center font-black text-2xl md:text-3xl border-3 border-[#FFD700] shadow-[0_0_25px_rgba(241,196,15,0.3)]">
                       {firstPlace.name.charAt(0).toUpperCase()}
                     </div>
                     <span className="absolute -bottom-1.5 -right-1.5 bg-[#FFD700] text-black text-[10px] font-black w-6 h-6 rounded-full flex items-center justify-center">
@@ -245,7 +246,7 @@ export default function Leaderboard() {
               {thirdPlace && (
                 <div className="flex flex-col items-center w-24 md:w-36">
                   <div className="relative mb-3">
-                    <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-amber-950/20 flex items-center justify-center font-bold text-lg md:text-xl border-2 border-amber-700">
+                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-amber-950/30 flex items-center justify-center font-black text-xl md:text-2xl border-3 border-amber-700 shadow-[0_0_20px_rgba(211,84,0,0.1)]">
                       {thirdPlace.name.charAt(0).toUpperCase()}
                     </div>
                     <span className="absolute -bottom-1.5 -right-1.5 bg-amber-700 text-white text-[9px] font-black w-5 h-5 rounded-full flex items-center justify-center">
@@ -265,7 +266,7 @@ export default function Leaderboard() {
 
         {/* 3. User Ranking Card */}
         <div className="lg:col-span-4 flex flex-col gap-6">
-          <div className="bg-[#171717] border border-[#262626] rounded-2xl p-6 flex-grow flex flex-col justify-between">
+          <div className="bg-gradient-to-br from-[#121212] via-[#171717] to-zinc-950/80 border border-zinc-800/80 rounded-2xl p-8 flex-grow flex flex-col justify-between shadow-xl">
             <div>
               <h2 className="text-xs font-bold uppercase tracking-widest text-[#FF6B00] mb-4">
                 Your Status
@@ -325,7 +326,7 @@ export default function Leaderboard() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* 4. Global Rankings Table */}
-        <div className="lg:col-span-8 bg-[#171717] border border-[#262626] rounded-2xl p-6 md:p-8">
+        <div className="lg:col-span-8 bg-[#121212]/90 border border-zinc-800/80 rounded-2xl p-8 shadow-lg hover:border-zinc-750/80 transition-all duration-300">
           <h2 className="text-lg font-bold uppercase tracking-wider text-white mb-6">
             Global Rankings
           </h2>
@@ -351,10 +352,10 @@ export default function Leaderboard() {
                 return (
                   <div 
                     key={row.rank} 
-                    className={`grid grid-cols-12 items-center p-4 rounded-xl transition-all duration-155 text-sm ${
+                    className={`grid grid-cols-12 items-center p-5 rounded-2xl transition-all duration-200 text-sm ${
                       isMe 
-                        ? 'border-2 border-[#FF6B00] shadow-[0_0_15px_rgba(255,107,0,0.25)] bg-[#171717]' 
-                        : 'border border-[#262626]/40 hover:border-zinc-800 bg-[#0F0F0F]/45'
+                        ? 'border-2 border-[#FF6B00] shadow-[0_0_25px_rgba(255,107,0,0.2)] bg-[#171717]' 
+                        : 'border border-zinc-800 hover:border-zinc-700 bg-zinc-900/30 hover:bg-zinc-900/50'
                     }`}
                   >
                     {/* Rank */}
@@ -399,7 +400,7 @@ export default function Leaderboard() {
         </div>
 
         {/* 5. Achievement Badges */}
-        <div className="lg:col-span-4 bg-[#171717] border border-[#262626] rounded-2xl p-6 md:p-8">
+        <div className="lg:col-span-4 bg-[#121212]/90 border border-zinc-800/80 rounded-2xl p-8 shadow-lg hover:border-zinc-750/80 transition-all duration-300">
           <h2 className="text-lg font-bold uppercase tracking-wider text-white mb-6">
             Your Achievements
           </h2>
@@ -420,7 +421,7 @@ export default function Leaderboard() {
                     <div className={`p-2.5 rounded-lg border ${
                       badge.unlocked ? badge.color : badge.lockedColor
                     }`}>
-                      Icon && <Icon className="w-5 h-5" />
+                      {Icon && <Icon className="w-5 h-5" />}
                     </div>
                     <div>
                       <h3 className="text-xs font-bold text-white uppercase tracking-wider mb-0.5">{badge.title}</h3>
@@ -444,6 +445,7 @@ export default function Leaderboard() {
             })}
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

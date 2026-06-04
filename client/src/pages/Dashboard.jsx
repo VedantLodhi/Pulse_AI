@@ -15,10 +15,47 @@ import {
   Flame,
   Sparkles,
   Lock,
-  Check
+  Check,
+  Edit
 } from "lucide-react"
 import axios from "axios"
 import { Backend_Uri } from "../config.js"
+const getFeedbackDetails = (accuracy) => {
+  if (accuracy <= 30) {
+    return {
+      label: "Major Improvement Needed",
+      classNames: "bg-red-500/10 text-red-500 border border-red-500/20"
+    };
+  }
+  if (accuracy <= 50) {
+    return {
+      label: "Needs Improvement",
+      classNames: "bg-red-500/10 text-orange-600 border border-orange-600/20"
+    };
+  }
+  if (accuracy <= 70) {
+    return {
+      label: "Can Improve",
+      classNames: "bg-orange-500/10 text-orange-500 border border-orange-500/20"
+    };
+  }
+  if (accuracy <= 85) {
+    return {
+      label: "Good Effort",
+      classNames: "bg-yellow-500/10 text-yellow-500 border border-yellow-500/20"
+    };
+  }
+  if (accuracy <= 94) {
+    return {
+      label: "Good Form",
+      classNames: "bg-green-500/10 text-green-500 border border-green-500/20"
+    };
+  }
+  return {
+    label: "Excellent Form",
+    classNames: "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+  };
+};
 
 export default function Dashboard() {
   const [userData, setUserData] = useState({
@@ -30,6 +67,14 @@ export default function Dashboard() {
     workoutStreak: 0,
     fitnessGoal: ""
   });
+  
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editFields, setEditFields] = useState({
+    weight: "",
+    height: "",
+    age: ""
+  });
+  const [validationError, setValidationError] = useState("");
 
   const [stats, setStats] = useState({
     totalWorkouts: 0,
@@ -159,11 +204,68 @@ export default function Dashboard() {
     return age;
   };
 
+  const handleOpenEditModal = () => {
+    const ageVal = userData.dob ? calculateAge(userData.dob) : "";
+    setEditFields({
+      weight: userData.weight || "",
+      height: userData.height || "",
+      age: ageVal > 0 ? ageVal : ""
+    });
+    setValidationError("");
+    setIsEditModalOpen(true);
+  };
+
+  const handleSaveProfile = async (e) => {
+    e.preventDefault();
+    const w = parseFloat(editFields.weight);
+    const h = parseFloat(editFields.height);
+    const a = parseInt(editFields.age);
+
+    if (isNaN(w) || w <= 0) {
+      setValidationError("Weight must be greater than 0.");
+      return;
+    }
+    if (isNaN(h) || h <= 0) {
+      setValidationError("Height must be greater than 0.");
+      return;
+    }
+    if (isNaN(a) || a <= 0) {
+      setValidationError("Age must be greater than 0.");
+      return;
+    }
+
+    try {
+      setValidationError("");
+      const response = await axios.post(`${Backend_Uri}/api/users/profile`, {
+        weight: w,
+        height: h,
+        age: a
+      }, {
+        withCredentials: true
+      });
+
+      if (response.data && response.data.success) {
+        setUserData(prev => ({
+          ...prev,
+          weight: w,
+          height: h,
+          dob: response.data.user.dob || prev.dob
+        }));
+        setIsEditModalOpen(false);
+      } else {
+        setValidationError("Failed to update profile. Please try again.");
+      }
+    } catch (err) {
+      console.error("Error updating profile:", err);
+      setValidationError(err.response?.data?.message || "An error occurred while saving profile.");
+    }
+  };
+
   // Accuracy Calculation
   const totalRepsEvaluated = stats.totalValidReps + stats.totalInvalidReps;
   const accuracyPercentage = totalRepsEvaluated > 0 
     ? Math.round((stats.totalValidReps / totalRepsEvaluated) * 100) 
-    : 100;
+    : 0;
 
   // Search & Filter History Logic
   const filteredHistory = history.filter((item) => {
@@ -259,7 +361,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-[#0A0A0A] p-4 sm:p-6 lg:p-8 pt-24 font-sans text-zinc-100 relative overflow-hidden">
       
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-8 relative z-10">
+      <div className="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-4 gap-10 relative z-10 w-full">
         
         {/* Main Analytics Section */}
         <div className="lg:col-span-3 space-y-8">
@@ -292,22 +394,22 @@ export default function Dashboard() {
           )}
 
           {/* Streak-centric Hero Block */}
-          <div className="bg-[#171717] border border-zinc-900 rounded-2xl p-8 md:p-10 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+          <div className="bg-gradient-to-br from-[#121212] via-[#171717] to-zinc-950/80 border border-zinc-800/80 hover:border-zinc-700/80 transition-all duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.4)] rounded-2xl p-10 md:p-12 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
             <div>
               <p className="text-xs font-bold text-[#FF6B00] uppercase tracking-widest flex items-center gap-1.5">
                 <Flame size={14} className="text-[#FF6B00]" /> CONSISTENCY STREAK
               </p>
               <div className="flex items-baseline mt-4">
-                <span className="text-9xl font-black text-white tracking-tighter leading-none">
+                <span className="text-[10rem] font-black text-white tracking-tighter leading-none">
                   {isLoading ? "0" : streak}
                 </span>
                 <span className="text-xl font-bold text-[#FF6B00] ml-2 uppercase tracking-wide">Days</span>
               </div>
-              <p className="text-xs text-zinc-500 mt-2 font-medium">Keep moving daily to hold your streak</p>
+              <p className="text-xs text-zinc-500 mt-2 font-medium">Keep daily momentum active for rewards</p>
             </div>
             <div className="flex flex-col gap-1 md:text-right border-t md:border-t-0 md:border-l border-zinc-800 pt-6 md:pt-0 md:pl-10 w-full md:w-auto">
               <p className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">TODAY'S REPS</p>
-              <p className="text-6xl font-black text-white tracking-tight mt-1">
+              <p className="text-7xl font-black text-white tracking-tight mt-1">
                 {isLoading ? "0" : todayReps}
               </p>
               <p className="text-xs text-zinc-400 mt-1">Repetitions completed today</p>
@@ -318,23 +420,23 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             
             {/* Total Workouts */}
-            <div className="bg-[#171717] border border-zinc-900 p-6 rounded-2xl">
+            <div className="bg-gradient-to-b from-zinc-900/60 to-zinc-950/80 border border-zinc-800/70 p-8 rounded-2xl shadow-md hover:border-[#FF6B00]/45 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,107,0,0.05)]">
               <span className="text-xs font-bold text-zinc-500 uppercase tracking-widest block">Workouts</span>
-              <p className="mt-2 text-4xl font-black text-white">{stats.totalWorkouts}</p>
+              <p className="mt-2 text-5xl font-black text-white">{stats.totalWorkouts}</p>
               <p className="text-xs text-zinc-500 mt-1">Completed training sessions</p>
             </div>
 
             {/* Lifetime Reps */}
-            <div className="bg-[#171717] border border-zinc-900 p-6 rounded-2xl">
+            <div className="bg-gradient-to-b from-zinc-900/60 to-zinc-950/80 border border-zinc-800/70 p-8 rounded-2xl shadow-md hover:border-[#FF6B00]/45 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,107,0,0.05)]">
               <span className="text-xs font-bold text-zinc-500 uppercase tracking-widest block">Lifetime Reps</span>
-              <p className="mt-2 text-4xl font-black text-white">{stats.totalReps}</p>
+              <p className="mt-2 text-5xl font-black text-white">{stats.totalReps}</p>
               <p className="text-xs text-zinc-500 mt-1">Total accumulated counts</p>
             </div>
 
             {/* Accuracy % */}
-            <div className="bg-[#171717] border border-zinc-900 p-6 rounded-2xl">
+            <div className="bg-gradient-to-b from-zinc-900/60 to-zinc-950/80 border border-zinc-800/70 p-8 rounded-2xl shadow-md hover:border-[#FF6B00]/45 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,107,0,0.05)]">
               <span className="text-xs font-bold text-zinc-500 uppercase tracking-widest block">Avg Accuracy</span>
-              <p className="mt-2 text-4xl font-black text-white">{accuracyPercentage}%</p>
+              <p className="mt-2 text-5xl font-black text-white">{accuracyPercentage}%</p>
               <p className="text-xs text-zinc-500 mt-1">Form compliance rating</p>
             </div>
           </div>
@@ -343,7 +445,7 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* Session Breakdown Bar Chart */}
-            <div className="bg-[#171717] border border-zinc-900 rounded-2xl p-6">
+            <div className="bg-[#121212]/90 border border-zinc-800/80 rounded-2xl p-8 shadow-lg hover:border-zinc-700/80 transition-all duration-300">
               <div className="mb-4">
                 <h3 className="font-bold text-white text-xs uppercase tracking-widest flex items-center gap-2">
                   <Activity size={16} className="text-[#FF6B00]" />
@@ -351,7 +453,7 @@ export default function Dashboard() {
                 </h3>
                 <p className="text-[10px] text-zinc-500 mt-0.5">Sessions completed per workout type</p>
               </div>
-              <div className="h-64">
+              <div className="h-80">
                 {isLoading ? (
                   <div className="h-full w-full bg-[#171717] animate-pulse rounded-xl"></div>
                 ) : barChartData.length === 0 ? (
@@ -382,7 +484,7 @@ export default function Dashboard() {
             </div>
 
             {/* Rep Accuracy Line Chart */}
-            <div className="bg-[#171717] border border-zinc-900 rounded-2xl p-6">
+            <div className="bg-[#121212]/90 border border-zinc-800/80 rounded-2xl p-8 shadow-lg hover:border-zinc-700/80 transition-all duration-300">
               <div className="mb-4">
                 <h3 className="font-bold text-white text-xs uppercase tracking-widest flex items-center gap-2">
                   <TrendingUp size={16} className="text-white" />
@@ -390,7 +492,7 @@ export default function Dashboard() {
                 </h3>
                 <p className="text-[10px] text-zinc-500 mt-0.5">Reps performance history (Last 7 sessions)</p>
               </div>
-              <div className="h-64">
+              <div className="h-80">
                 {isLoading ? (
                   <div className="h-full w-full bg-[#171717] animate-pulse rounded-xl"></div>
                 ) : lineChartData.length === 0 ? (
@@ -418,7 +520,7 @@ export default function Dashboard() {
           </div>
 
           {/* Workout History Card */}
-          <div className="bg-[#171717] border border-zinc-900 rounded-2xl p-6">
+          <div className="bg-[#121212]/90 border border-zinc-800/80 rounded-2xl p-8 shadow-lg hover:border-zinc-750/80 transition-all duration-300">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-[#262626]">
               <div>
                 <h3 className="font-bold text-white text-xs uppercase tracking-widest flex items-center gap-2">
@@ -429,7 +531,7 @@ export default function Dashboard() {
               
               <div className="flex flex-wrap items-center gap-3">
                 <div className="relative">
-                  <Search className="absolute left-3 top-2.5 text-zinc-500" size={16} />
+                  <Search className="absolute left-3 top-3 text-zinc-500" size={16} />
                   <input
                     type="text"
                     placeholder="Search exercise..."
@@ -438,7 +540,7 @@ export default function Dashboard() {
                       setSearchTerm(e.target.value);
                       setCurrentPage(1);
                     }}
-                    className="pl-9 pr-4 py-2 text-xs rounded-lg border border-zinc-800 bg-[#0A0A0A] text-white placeholder-zinc-650 focus:outline-none focus:border-[#FF6B00] transition-colors w-48 sm:w-56"
+                    className="pl-9 pr-4 py-2.5 text-xs rounded-xl border border-zinc-800 bg-zinc-950 text-white placeholder-zinc-600 focus:outline-none focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00]/30 hover:border-zinc-750 transition-all w-48 sm:w-56"
                   />
                 </div>
 
@@ -450,7 +552,7 @@ export default function Dashboard() {
                       setSortBy(e.target.value);
                       setCurrentPage(1);
                     }}
-                    className="text-xs bg-[#0A0A0A] border border-zinc-800 rounded-lg px-3 py-2 text-zinc-300 outline-none focus:border-[#FF6B00] cursor-pointer"
+                    className="text-xs bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2.5 text-zinc-300 outline-none focus:border-[#FF6B00] hover:border-zinc-750 transition-all cursor-pointer"
                   >
                     <option value="newest">Newest First</option>
                     <option value="oldest">Oldest First</option>
@@ -482,41 +584,41 @@ export default function Dashboard() {
                 <table className="w-full text-left">
                   <thead>
                     <tr className="text-zinc-500 text-[10px] font-bold uppercase tracking-wider border-b border-[#262626]">
-                      <th className="py-4 px-4">Exercise</th>
-                      <th className="py-4 px-4">Date / Time</th>
-                      <th className="py-4 px-4 text-center">Repetitions</th>
-                      <th className="py-4 px-4 text-center">Duration</th>
-                      <th className="py-4 px-4 text-center">Avg Confidence</th>
-                      <th className="py-4 px-4 text-right">Form Status</th>
+                      <th className="py-5 px-6">Exercise</th>
+                      <th className="py-5 px-6">Date / Time</th>
+                      <th className="py-5 px-6 text-center">Repetitions</th>
+                      <th className="py-5 px-6 text-center">Duration</th>
+                      <th className="py-5 px-6 text-center">Avg Confidence</th>
+                      <th className="py-5 px-6 text-right">Form Status</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#262626] text-zinc-300 text-xs">
                     {currentItems.map((item) => {
-                      const repAccuracy = item.reps > 0 ? Math.round((item.validReps / item.reps) * 100) : 100;
+                      const repAccuracy = item.reps > 0 ? Math.round((item.validReps / item.reps) * 100) : 0;
                       return (
-                        <tr key={item._id} className="hover:bg-zinc-900/10 transition-colors">
-                          <td className="py-4 px-4 font-bold text-white">
+                        <tr key={item._id} className="hover:bg-zinc-800/25 transition-colors">
+                          <td className="py-5 px-6 font-bold text-white">
                             {formatExerciseName(item.exerciseType)}
                           </td>
-                          <td className="py-4 px-4 text-zinc-500">
+                          <td className="py-5 px-6 text-zinc-500">
                             <div className="flex items-center gap-2">
                               <Calendar size={12} />
                               <span>{formatDate(item.timestamp)}</span>
                             </div>
                           </td>
-                          <td className="py-4 px-4 text-center">
+                          <td className="py-5 px-6 text-center">
                             <span className="text-white font-bold">{item.reps}</span>
                             <span className="text-[10px] text-zinc-500 block">
                               ({item.validReps || 0} valid, {item.invalidReps || 0} invalid)
                             </span>
                           </td>
-                          <td className="py-4 px-4 text-center font-mono text-zinc-400">
+                          <td className="py-5 px-6 text-center font-mono text-zinc-400">
                             <div className="flex items-center justify-center gap-1.5">
                               <Clock size={12} />
                               <span>{item.duration}</span>
                             </div>
                           </td>
-                          <td className="py-4 px-4 text-center">
+                          <td className="py-5 px-6 text-center">
                             <div className="flex flex-col items-center">
                               <span className="font-bold text-white">{Math.round(item.averageConfidence)}%</span>
                               <div className="w-16 bg-[#0A0A0A] rounded-full h-1 mt-1 overflow-hidden border border-zinc-800">
@@ -527,10 +629,15 @@ export default function Dashboard() {
                               </div>
                             </div>
                           </td>
-                          <td className="py-4 px-4 text-right">
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded text-[10px] font-bold ${repAccuracy > 80 ? 'bg-zinc-900 text-white border border-zinc-800' : 'bg-[#FF6B00]/10 text-[#FF6B00] border border-[#FF6B00]/20'}`}>
-                              {repAccuracy > 80 ? 'EXCELLENT FORM' : 'NEEDS CORRECTION'}
-                            </span>
+                          <td className="py-5 px-6 text-right">
+                            {(() => {
+                              const feedback = getFeedbackDetails(repAccuracy);
+                              return (
+                                <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold border ${feedback.classNames}`}>
+                                  {feedback.label.toUpperCase()}
+                                </span>
+                              );
+                            })()}
                           </td>
                         </tr>
                       );
@@ -571,7 +678,15 @@ export default function Dashboard() {
         <div className="space-y-6">
           
           {/* Profile Card */}
-          <div className="bg-[#171717] border border-zinc-900 rounded-2xl p-6 text-center relative overflow-hidden">
+          <div className="bg-[#121212]/90 border border-zinc-800/80 rounded-2xl p-8 text-center relative overflow-hidden shadow-lg hover:border-zinc-750/80 transition-all duration-300">
+            <button 
+              onClick={handleOpenEditModal}
+              className="absolute top-4 right-4 p-2 rounded-lg bg-[#0A0A0A] border border-zinc-800 hover:border-[#FF6B00] hover:text-[#FF6B00] transition-all cursor-pointer text-zinc-400"
+              title="Edit Profile"
+            >
+              <Edit size={14} />
+            </button>
+
             <div className="relative inline-flex mt-4">
               <div className="w-20 h-20 rounded-full bg-[#0A0A0A] border border-zinc-800 flex items-center justify-center text-zinc-500 shadow-inner">
                 <User size={36} className="text-zinc-400" />
@@ -584,24 +699,33 @@ export default function Dashboard() {
             </h3>
             <p className="text-[10px] text-[#FF6B00] font-bold uppercase tracking-widest">PULSEAI ATHLETE</p>
 
-            <div className="grid grid-cols-3 gap-2 border-t border-[#262626] mt-6 pt-6 text-zinc-300">
+            <div className="grid grid-cols-3 gap-2 border-t border-zinc-800/80 mt-6 pt-6 text-zinc-350">
               <div>
-                <p className="text-base font-black text-white">{isLoading ? "0" : userData.weight}<span className="text-[10px] font-bold text-zinc-500"> kg</span></p>
+                <p className="text-base font-black text-white">
+                  {isLoading ? "0" : (userData.weight > 0 ? userData.weight : "Not Set")}
+                  {!isLoading && userData.weight > 0 && <span className="text-[10px] font-bold text-zinc-550"> kg</span>}
+                </p>
                 <p className="text-[10px] text-zinc-500 mt-0.5">Weight</p>
               </div>
-              <div className="border-x border-[#262626]">
-                <p className="text-base font-black text-white">{isLoading ? "0" : userData.height}<span className="text-[10px] font-bold text-zinc-500"> cm</span></p>
+              <div className="border-x border-zinc-805/80">
+                <p className="text-base font-black text-white">
+                  {isLoading ? "0" : (userData.height > 0 ? userData.height : "Not Set")}
+                  {!isLoading && userData.height > 0 && <span className="text-[10px] font-bold text-zinc-550"> cm</span>}
+                </p>
                 <p className="text-[10px] text-zinc-500 mt-0.5">Height</p>
               </div>
               <div>
-                <p className="text-base font-black text-white">{isLoading ? "0" : calculateAge(userData.dob)}<span className="text-[10px] font-bold text-zinc-500"> yr</span></p>
+                <p className="text-base font-black text-white">
+                  {isLoading ? "0" : (calculateAge(userData.dob) > 0 ? calculateAge(userData.dob) : "Not Set")}
+                  {!isLoading && calculateAge(userData.dob) > 0 && <span className="text-[10px] font-bold text-zinc-550"> yr</span>}
+                </p>
                 <p className="text-[10px] text-zinc-500 mt-0.5">Age</p>
               </div>
             </div>
           </div>
 
           {/* Fitness Achievements Card */}
-          <div className="bg-[#171717] border border-zinc-900 rounded-2xl p-6">
+          <div className="bg-[#121212]/90 border border-zinc-800/80 rounded-2xl p-8 shadow-lg hover:border-zinc-750/80 transition-all duration-300">
             <h3 className="font-bold text-zinc-400 text-xs mb-4 uppercase tracking-widest flex items-center gap-2">
               <Award size={16} className="text-[#FF6B00]" />
               Achievements
@@ -632,7 +756,7 @@ export default function Dashboard() {
           </div>
 
           {/* Calibration Notice */}
-          <div className="bg-[#171717] border border-zinc-900 rounded-2xl p-6 relative overflow-hidden">
+          <div className="bg-[#121212]/90 border border-zinc-800/80 rounded-2xl p-8 relative overflow-hidden shadow-lg">
             <div className="flex items-center gap-2 text-[#FF6B00] mb-2">
               <Sparkles size={16} />
               <h3 className="font-bold text-xs uppercase tracking-wider">Calibration Tips</h3>
@@ -645,6 +769,78 @@ export default function Dashboard() {
         </div>
 
       </div>
+
+      {/* Edit Profile Modal */}
+      {isEditModalOpen && (
+        <div className="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center z-50 p-4">
+          <div className="bg-[#121212]/95 border border-zinc-800 rounded-2xl max-w-md w-full p-8 space-y-6 shadow-[0_0_60px_rgba(0,0,0,0.9),0_0_30px_rgba(255,107,0,0.08)] backdrop-blur-md">
+            <div>
+              <h3 className="text-lg font-black text-white uppercase tracking-tight flex items-center gap-2">
+                <Edit size={18} className="text-[#FF6B00]" /> Edit Profile Details
+              </h3>
+              <p className="text-xs text-zinc-500 mt-1">Update your weight, height, and age parameters below.</p>
+            </div>
+
+            {validationError && (
+              <div className="bg-red-950/20 border border-red-900 text-red-400 p-3 rounded-lg text-xs font-semibold">
+                {validationError}
+              </div>
+            )}
+
+            <form onSubmit={handleSaveProfile} className="space-y-4">
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block">Weight (kg)</label>
+                <input 
+                  type="number" 
+                  step="0.1"
+                  placeholder="e.g. 70" 
+                  value={editFields.weight}
+                  onChange={(e) => setEditFields(prev => ({ ...prev, weight: e.target.value }))}
+                  className="w-full bg-zinc-950/80 border border-zinc-850 hover:border-zinc-750 focus:border-[#FF6B00] focus:ring-2 focus:ring-[#FF6B00]/25 rounded-xl px-4 py-3 text-sm text-white outline-none transition-all duration-200"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block">Height (cm)</label>
+                <input 
+                  type="number" 
+                  placeholder="e.g. 175" 
+                  value={editFields.height}
+                  onChange={(e) => setEditFields(prev => ({ ...prev, height: e.target.value }))}
+                  className="w-full bg-zinc-950/80 border border-zinc-850 hover:border-zinc-750 focus:border-[#FF6B00] focus:ring-2 focus:ring-[#FF6B00]/25 rounded-xl px-4 py-3 text-sm text-white outline-none transition-all duration-200"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block">Age (years)</label>
+                <input 
+                  type="number" 
+                  placeholder="e.g. 25" 
+                  value={editFields.age}
+                  onChange={(e) => setEditFields(prev => ({ ...prev, age: e.target.value }))}
+                  className="w-full bg-zinc-950/80 border border-zinc-850 hover:border-zinc-750 focus:border-[#FF6B00] focus:ring-2 focus:ring-[#FF6B00]/25 rounded-xl px-4 py-3 text-sm text-white outline-none transition-all duration-200"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 pt-2">
+                <button 
+                  type="button" 
+                  onClick={() => setIsEditModalOpen(false)}
+                  className="py-3 rounded-xl border border-zinc-850 bg-zinc-950 hover:bg-zinc-900 hover:border-zinc-700 transition-all duration-200 text-xs font-bold uppercase tracking-widest text-zinc-450 cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  className="py-3 rounded-xl bg-[#FF6B00] hover:bg-[#ff802b] text-white hover:shadow-[0_0_15px_rgba(255,107,0,0.25)] transition-all duration-200 text-xs font-black uppercase tracking-widest cursor-pointer"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
