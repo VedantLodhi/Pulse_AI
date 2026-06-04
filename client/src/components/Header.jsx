@@ -57,6 +57,7 @@ function Header() {
 
   const handleLogout = async () => {
     try {
+      localStorage.removeItem("token");
       await axios.get(`${Backend_Uri}/api/users/logout`, {
         withCredentials: true,
       });
@@ -157,7 +158,7 @@ function Header() {
           <SidebarLink icon={<Heart size={18} />} label="Meditation" href="/page3"/>
           <SidebarLink icon={<ShoppingBag size={18} />} label="Market Place" href="/dashboard"/>
           <SidebarLink icon={<Trophy size={18} />} label="Leader Board" href='/leaderboard' />
-          <SidebarLink icon={<Flag size={18} />} label="Challenges" href="/page4"/>
+          <SidebarLink icon={<Flag size={18} />} label="Challenges" href="/challenges"/>
           
           <div className="border-t border-zinc-900 my-4" />
           

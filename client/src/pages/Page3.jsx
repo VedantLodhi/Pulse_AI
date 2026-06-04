@@ -3,11 +3,30 @@ import { useEffect } from "react";
 import "../App.css";
 import img from "../assets/i22.png";
 import { Play } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function Page3() {
+  const navigate = useNavigate();
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const handleStartTraining = () => {
+    const isLoggedIn = !!localStorage.getItem("token");
+    if (isLoggedIn) {
+      navigate("/dashboard");
+    } else {
+      navigate("/login");
+    }
+  };
+
+  const handleWatchDemo = () => {
+    const nextSection = document.getElementById("yoga-meditation-section");
+    if (nextSection) {
+      nextSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
   const categories = [
     {
       title: "GEAR",
@@ -62,11 +81,17 @@ function Page3() {
                 achieving greatness through dedication and perseverance.
               </p>
 
-              <button className="bg-[#e67e22] text-white px-8 py-3 rounded-md text-xl font-bold hover:bg-[#d35400] transition-colors duration-300 mb-8">
+              <button 
+                onClick={handleStartTraining}
+                className="bg-[#e67e22] text-white px-8 py-3 rounded-md text-xl font-bold hover:bg-[#d35400] transition-colors duration-300 mb-8 cursor-pointer"
+              >
                 Start Training
               </button>
 
-              <div className="flex items-center justify-center gap-3">
+              <div 
+                onClick={handleWatchDemo}
+                className="flex items-center justify-center gap-3 cursor-pointer"
+              >
                 <div className="w-10 h-10 border border-[#e67e22] rounded-full  text-[#e67e22] flex justify-center items-center">
                   <Play />
                 </div>
@@ -76,7 +101,7 @@ function Page3() {
           </div>
         </div>
       </section>
-      <section>
+      <section id="yoga-meditation-section">
         <div className="min-h-screen relative">
           {/* Background Image */}
           <div className="absolute inset-0">
@@ -109,7 +134,10 @@ function Page3() {
                 <span className="text-[#8A2BE2]">life of joy</span>
               </h2>
 
-              <button className="bg-[#e67e22] text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-[#d35400] transition-colors duration-300 mt-6">
+              <button 
+                onClick={handleStartTraining}
+                className="bg-[#e67e22] text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-[#d35400] transition-colors duration-300 mt-6 cursor-pointer"
+              >
                 Start Meditation
               </button>
             </div>
@@ -260,7 +288,10 @@ function Page3() {
             </div>
 
             <div className="flex justify-center mt-16">
-              <button className="bg-[#e67e22] text-white font-bold py-4 px-12 rounded-lg text-xl">
+              <button 
+                onClick={() => navigate('/leaderboard')}
+                className="bg-[#e67e22] text-white font-bold py-4 px-12 rounded-lg text-xl cursor-pointer"
+              >
                 DARE TO LEAP
               </button>
             </div>

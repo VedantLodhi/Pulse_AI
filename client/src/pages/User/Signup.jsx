@@ -24,16 +24,20 @@ const Signup = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleGoogleCallback = async (response) => {
+  const handleGoogleCallback = async (googleResponse) => {
     try {
-      console.log("Encoded JWT ID token received from Google:", response.credential);
-      const res = await axios.post(
+      console.log("Encoded JWT ID token received from Google:", googleResponse.credential);
+      const response = await axios.post(
         `${Backend_Uri}/api/users/google-login`,
-        { credential: response.credential },
+        { credential: googleResponse.credential },
         { withCredentials: true }
       );
-      if (res.status === 200) {
-        console.log("Google Signup/Login success:", res.data);
+      if (response.status === 200) {
+        console.log("Google Signup/Login success:", response.data);
+        localStorage.setItem(
+          "token",
+          response.data.token
+        );
         navigate("/dashboard");
         window.location.reload();
       }
@@ -100,6 +104,10 @@ const Signup = () => {
 
       const data = await response.json();
       console.log("Signup successful:", data);
+      localStorage.setItem(
+        "token",
+        data.token
+      );
       
       setSuccess(true);
       

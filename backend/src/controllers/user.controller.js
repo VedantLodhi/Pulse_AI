@@ -311,6 +311,7 @@ export const googleLogin = async (req, res) => {
 
     res.status(200).json({
       success: true,
+      token,
       user
     });
 

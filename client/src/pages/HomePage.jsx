@@ -4,9 +4,14 @@ import { useNavigate } from 'react-router-dom'
 export default function HomePage() {
   const navigate = useNavigate()
 
-  const goToPage = () => {  
-    window.open('http://127.0.0.1:5001/', '_blank')
-  }
+  const handleStartTraining = () => {
+    const isLoggedIn = !!localStorage.getItem("token");
+    if (isLoggedIn) {
+      navigate("/dashboard");
+    } else {
+      navigate("/login");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white pt-16 font-sans overflow-x-hidden selection:bg-[#FF6B00] selection:text-white">
@@ -23,7 +28,7 @@ export default function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 pt-2">
             <button 
-              onClick={goToPage}
+              onClick={handleStartTraining}
               className="bg-[#FF6B00] hover:bg-[#e05e00] text-white font-extrabold uppercase tracking-widest text-xs px-8 py-4 transition-all duration-150 cursor-pointer"
             >
               Start Training
@@ -131,7 +136,7 @@ export default function HomePage() {
             Unlock premium computer vision tracking using just your laptop or mobile front camera. Start moving better today.
           </p>
           <button 
-            onClick={goToPage}
+            onClick={handleStartTraining}
             className="bg-[#FF6B00] hover:bg-[#e05e00] text-white font-extrabold uppercase tracking-widest text-xs px-10 py-5 transition-all duration-150 cursor-pointer"
           >
             Launch Training Session

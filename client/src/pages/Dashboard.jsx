@@ -57,10 +57,19 @@ export default function Dashboard() {
       setIsLoading(true);
       setIsError(false);
       try {
+        console.log(
+          "LOCAL TOKEN:",
+          localStorage.getItem("token")
+        );
         // 1. Fetch User Profile
         const profileRes = await axios.get(`${Backend_Uri}/api/users/profile`, {
           withCredentials: true,
         });
+        const response = profileRes;
+        console.log(
+          "PROFILE REQUEST CONFIG:",
+          response
+        );
         if (profileRes.data) {
           setUserData(profileRes.data);
         }

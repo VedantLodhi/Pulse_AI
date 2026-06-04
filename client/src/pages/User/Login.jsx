@@ -13,16 +13,33 @@ export default function Login() {
 
   const navigate = useNavigate();
 
-  const handleGoogleCallback = async (response) => {
+  const handleGoogleCallback = async (googleResponse) => {
     try {
-      console.log("Encoded JWT ID token received from Google:", response.credential);
-      const res = await axios.post(
+      console.log("Encoded JWT ID token received from Google:", googleResponse.credential);
+      const response = await axios.post(
         `${Backend_Uri}/api/users/google-login`,
-        { credential: response.credential },
+        { credential: googleResponse.credential },
         { withCredentials: true }
       );
-      if (res.status === 200) {
-        console.log("Google Sign-In success:", res.data);
+      if (response.status === 200) {
+        localStorage.setItem(
+          "token",
+          response.data.token
+        );
+        console.log(
+          "TOKEN SAVED:",
+          localStorage.getItem("token")
+        );
+        console.log(response.data);
+        console.log("LOGIN RESPONSE:", response.data);
+        console.log(
+          "TOKEN FROM RESPONSE:",
+          response.data?.token
+        );
+        console.log(
+          "TOKEN AFTER SAVE:",
+          localStorage.getItem("token")
+        );
         navigate("/dashboard");
         window.location.reload();
       }
@@ -60,7 +77,24 @@ export default function Login() {
         { withCredentials: true }
       );
       if (response.status === 200) {
-        console.log("Login successful:", response.data);
+        localStorage.setItem(
+          "token",
+          response.data.token
+        );
+        console.log(
+          "TOKEN SAVED:",
+          localStorage.getItem("token")
+        );
+        console.log(response.data);
+        console.log("LOGIN RESPONSE:", response.data);
+        console.log(
+          "TOKEN FROM RESPONSE:",
+          response.data?.token
+        );
+        console.log(
+          "TOKEN AFTER SAVE:",
+          localStorage.getItem("token")
+        );
         navigate("/dashboard");
         window.location.reload();
       }
