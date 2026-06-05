@@ -50,6 +50,11 @@ const Signup = () => {
   useEffect(() => {
     /* global google */
     if (typeof google !== 'undefined') {
+      console.log(
+    "GOOGLE CLIENT ID:",
+    import.meta.env.VITE_GOOGLE_CLIENT_ID
+    );
+
       google.accounts.id.initialize({
         client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID || "1081648037356-placeholdercookieid.apps.googleusercontent.com",
         callback: handleGoogleCallback,
