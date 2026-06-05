@@ -673,6 +673,12 @@ class FitnessTracker:
 def generate_frames():
     """Generator function to yield video frames"""
     cap = cv2.VideoCapture(0)
+    
+    if cap.isOpened():
+        print("✅ CAMERA OPENED SUCCESSFULLY")
+    else:
+        print("❌ CAMERA NOT FOUND")
+
     # Set resolution to improve performance
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
