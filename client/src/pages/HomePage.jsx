@@ -5,7 +5,8 @@ export default function HomePage() {
   const navigate = useNavigate()
 
   const pythonUri = import.meta.env.VITE_PYTHON_URI;
-
+ console.log("PYTHON URI =", pythonUri);
+   
 const handleStartTraining = () => {
   const token = localStorage.getItem('token');
 
