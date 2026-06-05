@@ -152,7 +152,7 @@ export const addUserDetails = async (req, res) => {
 
     const { dob, gender, weight, height, dailyCalorieGoal, fitnessGoal, activityLevel, age } = req.body;
 
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).select("-password");
     if (!user) {
       return res.status(404).json({ message: 'User not found.' });
     }

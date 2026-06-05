@@ -4,7 +4,7 @@ import User from '../models/user.model.js';
 
 // 📌 Log a completed workout session
 export const logWorkout = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   try {
     const userId = req.user; // from verifyToken middleware
     const { sessionId, exerciseType, reps, duration, averageConfidence, validReps, invalidReps } = req.body;

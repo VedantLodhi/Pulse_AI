@@ -4,14 +4,17 @@ import { useNavigate } from 'react-router-dom'
 export default function HomePage() {
   const navigate = useNavigate()
 
-  const handleStartTraining = () => {
-    const token = localStorage.getItem('token')
-    if (token) {
-      window.open(`http://127.0.0.1:5001/?token=${token}`, '_blank')
-    } else {
-      window.open('http://127.0.0.1:5001/', '_blank')
-    }
-  };
+  const pythonUri = import.meta.env.VITE_PYTHON_URI;
+
+const handleStartTraining = () => {
+  const token = localStorage.getItem('token');
+
+  if (token) {
+    window.open(`${pythonUri}/?token=${token}`, '_blank');
+  } else {
+    window.open(`${pythonUri}/`, '_blank');
+  }
+};
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white pt-24 font-sans overflow-x-hidden selection:bg-[#FF6B00] selection:text-white">

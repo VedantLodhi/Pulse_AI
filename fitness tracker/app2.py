@@ -1801,7 +1801,7 @@ def create_templates():
                     invalidReps: currentSessionState.invalid_reps !== undefined ? currentSessionState.invalid_reps : 0
                 };
 
-                console.log("WORKOUT PAYLOAD:", payload);
+                # console.log("WORKOUT PAYLOAD:", payload);
 
                 // Get token from URL query parameter or fallback to localStorage
                 const urlParams = new URLSearchParams(window.location.search);
@@ -1819,10 +1819,10 @@ def create_templates():
                     headers['Authorization'] = `Bearer ${token}`;
                 }
 
-                console.log("AUTH TOKEN:", token);
-                console.log("REQUEST HEADERS:", headers);
+                # console.log("AUTH TOKEN:", token);
+                # console.log("REQUEST HEADERS:", headers);
 
-                fetch('http://localhost:5000/api/workouts/log', {
+                fetch("https://pulse-ai-mu1i.onrender.com/api/workouts/log", {
                     method: 'POST',
                     headers: headers,
                     body: JSON.stringify(payload),

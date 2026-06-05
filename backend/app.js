@@ -35,31 +35,8 @@ app.use('/api/workouts', workoutRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
 
 
+const PORT = process.env.PORT || 5000;
 
-app.listen(5000, () => {
-    console.log("🚀 Server running on  http://localhost:5000");
+app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
 });
-
-/*{
-    "message": "User registered successfully.",
-    "user": {
-        "name": "tushar",
-        "email": "tushar2470.be22@chitkara.edu.in",
-        "password": "$2b$10$NB7.ayrXmOhiHcbHoHg2y.4gBNhkCS/r8KGRpNRg2xlUymSQrQ.1.",
-        "phone": "8146786435",
-        "otpEmail": "249775",
-        "otpPhone": "943192",
-        "verifiedEmail": false,
-        "verifiedPhone": false,
-        "dailyCalorieGoal": 2000,
-        "workoutStreak": 0,
-        "totalRewards": 0,
-        "weight": 0,
-        "height": 0,
-        "bmi": 0,
-        "_id": "67b22f19d233703a4682561d",
-        "createdAt": "2025-02-16T18:31:53.210Z",
-        "updatedAt": "2025-02-16T18:31:53.210Z",
-        "__v": 0
-    }
-}*/
