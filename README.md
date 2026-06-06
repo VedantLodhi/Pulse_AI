@@ -2,62 +2,218 @@
 
 ## AI-Powered Fitness Tracking & Workout Analysis Platform
 
-PulseAI is a full-stack AI fitness platform that combines Computer Vision, Pose Estimation, and Real-Time Analytics to help users track workouts, monitor exercise form, count repetitions automatically, and analyze performance metrics with precision.
+PulseAI is a full-stack AI-powered fitness tracking platform that leverages Computer Vision, Pose Estimation, and Real-Time Analytics to help users monitor workouts, analyze exercise form, automatically count repetitions, and track performance metrics with high accuracy.
 
-Using MediaPipe and OpenCV, PulseAI transforms a standard webcam into an intelligent fitness assistant capable of providing real-time movement analysis and workout insights.
+Using MediaPipe, OpenCV, and modern web technologies, PulseAI transforms a standard webcam into an intelligent virtual fitness assistant capable of understanding body movements, evaluating workout quality, and generating actionable fitness insights.
 
 ---
 
-## 🚀 Key Features
+# 📌 Problem Statement
 
-### 🎯 Real-Time Exercise Tracking
+Traditional workout tracking methods rely heavily on manual repetition counting and subjective form evaluation, often leading to inaccurate workout records and poor exercise execution.
+
+PulseAI addresses this challenge by using AI-powered pose estimation and real-time movement analysis to:
+
+* Automatically count repetitions
+* Monitor exercise posture
+* Detect incorrect form
+* Track workout performance
+* Maintain workout history and analytics
+* Motivate users through leaderboards and challenges
+
+---
+
+# 🚀 Key Features
+
+## 🎯 Real-Time Exercise Tracking
 
 * Live body pose detection using MediaPipe
 * Automatic repetition counting
 * Real-time workout monitoring
-* Multiple exercise support (Push-ups, Squats, Sit-ups, Bicep Curls)
+* Multi-exercise support
+* Low-latency movement analysis
 
-### 🤖 AI-Powered Form Analysis
+### Supported Exercises
 
-* Detects exercise posture and movement patterns
-* Measures form accuracy and workout quality
-* Provides performance feedback based on workout execution
-* Tracks valid and invalid repetitions
-
-### 📊 Advanced Workout Analytics
-
-* Workout history tracking
-* Exercise distribution visualization
-* Repetition progress monitoring
-* Accuracy and performance metrics
-* Streak tracking and activity logs
-
-### 🏆 Competitive Leaderboard System
-
-* Global athlete rankings
-* Dynamic scoring system
-* Performance-based achievements
-* Workout streak rewards
-
-### 👤 User Management & Authentication
-
-* JWT Authentication
-* Google OAuth Login
-* Secure user sessions
-* Personalized athlete dashboard
-
-### 💾 Workout Session Persistence
-
-* Save or discard completed workout sessions
-* Real-time synchronization with dashboard
-* Duplicate workout protection
-* Activity history management
+* Push-Ups
+* Squats
+* Sit-Ups
+* Bicep Curls
 
 ---
 
-## 🛠 Tech Stack
+## 🤖 AI-Powered Form Analysis
 
-### Frontend
+* Detects exercise posture and movement patterns
+* Measures workout accuracy
+* Evaluates movement quality
+* Provides posture-based feedback
+* Identifies valid and invalid repetitions
+
+---
+
+## 📊 Advanced Workout Analytics
+
+* Workout history tracking
+* Exercise distribution analysis
+* Performance trends
+* Accuracy metrics
+* Streak tracking
+* Session-based statistics
+
+---
+
+## 🏆 Competitive Leaderboard System
+
+* Global athlete rankings
+* Dynamic scoring algorithm
+* Workout streak rewards
+* Performance-based achievements
+* User comparison metrics
+
+---
+
+## 👤 User Management & Authentication
+
+* JWT Authentication
+* Google OAuth Login
+* Secure session management
+* Protected routes
+* Personalized athlete profiles
+
+---
+
+## 💾 Workout Session Persistence
+
+* Save completed workout sessions
+* Discard unwanted sessions
+* Duplicate workout prevention
+* Dashboard synchronization
+* Historical performance storage
+
+---
+
+# 🏗️ System Architecture
+
+```text
+                    ┌─────────────────────┐
+                    │      React.js       │
+                    │      Frontend       │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │ Node.js + Express   │
+                    │      Backend        │
+                    └──────────┬──────────┘
+                               │
+                ┌──────────────┴──────────────┐
+                ▼                             ▼
+
+      ┌─────────────────┐         ┌─────────────────┐
+      │ MongoDB Atlas   │         │ Flask AI Module │
+      │ User & Workout  │         │ MediaPipe + CV  │
+      │ Data Storage    │         │ Pose Detection  │
+      └─────────────────┘         └─────────────────┘
+```
+
+---
+
+# 🔄 Application Workflow
+
+### Step 1: User Authentication
+
+Users authenticate using:
+
+* Email & Password
+* Google OAuth
+
+A JWT token is generated after successful authentication.
+
+---
+
+### Step 2: Workout Session Initialization
+
+The user launches the AI Training Studio.
+
+The application:
+
+* Opens the webcam
+* Initializes pose estimation
+* Starts exercise tracking
+
+---
+
+### Step 3: Pose Detection
+
+MediaPipe analyzes each video frame and detects:
+
+* Head landmarks
+* Shoulder joints
+* Elbow joints
+* Hip joints
+* Knee joints
+* Ankle joints
+
+A total of 33 body landmarks are tracked in real time.
+
+---
+
+### Step 4: Exercise Analysis
+
+The system calculates:
+
+* Joint angles
+* Body alignment
+* Movement range
+* Exercise phase transitions
+
+---
+
+### Step 5: Rep Counting
+
+Custom angle-based algorithms determine:
+
+* Start position
+* End position
+* Valid repetitions
+
+This prevents false counting caused by random movements.
+
+---
+
+### Step 6: Performance Evaluation
+
+PulseAI evaluates:
+
+* Workout accuracy
+* Form consistency
+* Repetition quality
+* Session duration
+
+---
+
+### Step 7: Data Persistence
+
+Workout data is stored in MongoDB, including:
+
+* Exercise type
+* Repetition count
+* Accuracy score
+* Duration
+* Timestamp
+
+---
+
+### Step 8: Analytics & Leaderboard Updates
+
+Dashboard statistics and leaderboard rankings are updated automatically.
+
+---
+
+# 🛠 Tech Stack
+
+## Frontend
 
 * React.js
 * JavaScript (ES6+)
@@ -66,139 +222,249 @@ Using MediaPipe and OpenCV, PulseAI transforms a standard webcam into an intelli
 * Axios
 * React Router
 
-### Backend
+---
+
+## Backend
 
 * Node.js
 * Express.js
 
-### Database
+---
+
+## Database
 
 * MongoDB Atlas
 * Mongoose ODM
 
-### AI & Computer Vision
+---
 
-* MediaPipe
-* OpenCV
+## AI & Computer Vision
+
 * Python
 * Flask
+* MediaPipe
+* OpenCV
 
-### Authentication & Security
+---
+
+## Authentication & Security
 
 * JWT Authentication
 * Google OAuth
-* Password Hashing (bcrypt)
-
-### Deployment
-
-* Vercel (Frontend)
-* Render (Backend)
+* bcrypt Password Hashing
 
 ---
 
-## 📈 Core Functionalities
+## Deployment
 
-### Smart Rep Counting
+### Frontend
 
-Calculates repetitions using body joint angles and movement thresholds instead of simple motion detection, improving accuracy during workouts.
+* Vercel
 
-### Pose Estimation
+### Backend
 
-Uses MediaPipe's landmark detection system to track body movements and evaluate exercise execution in real time.
+* Render
 
-### Workout Quality Assessment
+### Database
 
-Generates form quality scores and dynamic feedback based on workout accuracy and posture consistency.
-
-### Session Analytics
-
-Stores workout sessions, calculates performance metrics, tracks streaks, and updates athlete rankings automatically.
+* MongoDB Atlas
 
 ---
 
-## 📸 Application Modules
+# 🧠 Why MediaPipe?
 
-### Home Page
+MediaPipe was selected because it provides:
 
-Modern landing page showcasing platform capabilities.
+* Real-time pose estimation
+* Lightweight performance
+* 33 body landmark detection
+* High tracking accuracy
+* Cross-platform compatibility
 
-### Athlete Dashboard
+These capabilities make it ideal for browser-based fitness applications.
+
+---
+
+# 🔌 Core Functionalities
+
+## Smart Rep Counting
+
+PulseAI uses body joint angles and movement thresholds to count repetitions accurately rather than relying on simple motion detection.
+
+---
+
+## Pose Estimation
+
+MediaPipe landmarks are continuously analyzed to understand body movement and workout execution.
+
+---
+
+## Workout Quality Assessment
+
+The system generates performance scores based on:
+
+* Form accuracy
+* Movement consistency
+* Exercise completion quality
+
+---
+
+## Session Analytics
+
+PulseAI stores and analyzes workout sessions to provide long-term performance insights.
+
+---
+
+# 📸 Application Modules
+
+## 🏠 Home Page
+
+Modern landing page introducing the platform and its capabilities.
+
+---
+
+## 📊 Athlete Dashboard
+
+Features:
 
 * Workout statistics
-* Exercise analytics
-* Progress graphs
+* Progress charts
+* Performance analytics
 * Workout history
 * Achievement tracking
 
-### AI Training Studio
+---
+
+## 🎯 AI Training Studio
+
+Features:
 
 * Live camera feed
-* Pose detection overlay
-* Real-time rep counting
-* Workout summary modal
+* Pose overlay visualization
+* Real-time repetition counting
+* Workout summary generation
 * Session save/discard workflow
 
-### Leaderboard
+---
+
+## 🏆 Leaderboard
+
+Features:
 
 * Athlete rankings
-* Performance scoring
+* Score comparison
+* Streak analysis
 * Achievement highlights
 
-### Challenges
+---
+
+## 🎯 Challenges
+
+Features:
 
 * Fitness challenge participation
-* Progress tracking
-* Goal completion monitoring
+* Goal tracking
+* Progress monitoring
 
 ---
 
-## 💡 Future Enhancements
+# 🔒 Security Considerations
 
-* AI Workout Recommendations
+PulseAI follows several security practices:
+
+* JWT-based authorization
+* Password hashing using bcrypt
+* Protected API endpoints
+* Secure token validation
+* User-specific workout access control
+* OAuth-based authentication support
+
+---
+
+# ⚡ Scalability Considerations
+
+PulseAI is designed using a modular architecture.
+
+The frontend, backend, and AI services are deployed independently, making it easier to:
+
+* Scale AI workloads separately
+* Deploy updates independently
+* Improve maintainability
+* Support future microservice migration
+
+---
+
+# 🚧 Technical Challenges Solved
+
+During development, several engineering challenges were addressed:
+
+* Accurate repetition counting using body joint angles
+* Real-time pose detection optimization
+* Integration of MediaPipe with workout logic
+* JWT and Google OAuth authentication
+* Workout session persistence
+* Dashboard analytics generation
+* Leaderboard ranking calculations
+* MERN + Flask service integration
+* Cross-origin deployment management
+
+---
+
+# 💡 Future Enhancements
+
+* AI Workout Recommendation Engine
 * Personalized Fitness Coach
 * Nutrition & Diet Tracking
-* Exercise Recognition using Deep Learning
-* Mobile Application (React Native)
-* Weekly & Monthly Performance Reports
-* Email Workout Summaries
+* React Native Mobile Application
+* Email Workout Reports
+* Weekly Performance Insights
 * Wearable Device Integration
+* Exercise Recognition using Deep Learning
+* AI-generated Workout Plans
+* Voice-guided Training Sessions
 
 ---
 
-## 📚 Learning Outcomes
+# 📚 Learning Outcomes
 
-This project helped me gain practical experience in:
+This project provided practical experience in:
 
-* Computer Vision
-* Pose Estimation
-* MediaPipe Integration
-* OpenCV Processing
 * Full-Stack MERN Development
+* Computer Vision Applications
+* Pose Estimation Systems
+* Real-Time Analytics
 * REST API Design
 * Authentication & Security
 * MongoDB Data Modeling
-* Real-Time Analytics Systems
-* AI-Powered Application Development
+* Cloud Deployment
+* AI Service Integration
+* Distributed Application Architecture
 
 ---
 
-## ⭐ Project Highlights
+# ⭐ Project Highlights
 
 * Real-Time Computer Vision Application
 * AI-Based Exercise Analysis
-* Full-Stack MERN Architecture
+* Automatic Repetition Counting
 * JWT & Google Authentication
-* Interactive Dashboard & Leaderboard
+* Interactive Dashboard & Analytics
+* Competitive Leaderboard System
+* Workout Session Persistence
+* MERN + Flask Architecture
 * Production Deployment Ready
 * End-to-End Fitness Tracking Workflow
 
 ---
 
-## 👨‍💻 Author
+# 👨‍💻 Author
 
 **Vedant Lodhi**
 
 GitHub: https://github.com/VedantLodhi
+
 LinkedIn: https://www.linkedin.com/in/vedant-lodhi/
 
-If you found this project useful, consider giving it a ⭐ and sharing feedback.
+---
+
+If you found this project useful, consider giving it a ⭐ on GitHub and sharing your feedback.
